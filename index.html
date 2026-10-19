@@ -44,6 +44,15 @@
     <!-- 主体内容 -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 space-y-5">
         
+        <!-- 管理员开启状态中央提示框 -->
+        <div id="adminNoticeBar" class="hidden w-full text-center py-2.5 px-4 rounded-xl glass-panel border border-amber-500/40 shadow-lg shadow-amber-500/10 transition">
+            <p class="text-xs font-bold text-amber-400 tracking-wider flex items-center justify-center space-x-2">
+                <span class="animate-pulse">⚡</span>
+                <span>当前处于【管理员模式】—— 可上传或删除资源</span>
+                <span class="animate-pulse">⚡</span>
+            </p>
+        </div>
+
         <!-- 搜索与高科技分类控制台 -->
         <div class="glass-panel rounded-2xl p-4 space-y-3.5 shadow-2xl relative overflow-hidden">
             <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
