@@ -8,93 +8,102 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f1520'/><circle cx='50' cy='50' r='36' fill='%23f59e0b' opacity='0.2'/><text y='.78em' font-size='60' x='15'>🐒</text></svg>">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入自定义样式表 -->
+    <!-- 引入高科技风格样式表 -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-black text-sm">
 
-    <!-- 顶栏导航 -->
-    <header class="glass-panel sticky top-0 z-40 border-b border-gray-800/80">
-        <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
-            <div class="flex items-center space-x-2.5">
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-700 via-amber-500 to-yellow-400 flex items-center justify-center font-black text-black text-base shadow-md overflow-hidden border border-amber-400/40">
-                    <span class="text-base">🐒</span>
+    <!-- 顶部科技感导航栏 -->
+    <header class="tech-header sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="relative">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-amber-500 to-cyan-500 rounded-xl blur opacity-70"></div>
+                    <div class="relative w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center font-black text-amber-400 text-lg border border-amber-500/50 shadow-inner">
+                        🐒
+                    </div>
                 </div>
-                <div class="flex items-baseline space-x-2">
-                    <h1 class="text-base font-bold tracking-wider text-white">小猴子的百变MOD</h1>
-                    <span class="text-[11px] text-amber-400/80 hidden sm:inline-block">| 云端实时安全同步版</span>
+                <div class="flex flex-col">
+                    <h1 class="text-base font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white via-amber-200 to-amber-400">小猴子的百变MOD</h1>
+                    <span class="text-[10px] tracking-widest text-cyan-400 font-mono uppercase">◆ CLOUD SECURE SYNC v2.6 ◆</span>
                 </div>
             </div>
             <div class="flex items-center space-x-3">
-                <button id="uploadTriggerBtn" onclick="openUploadModal()" class="hidden px-3 py-1.5 bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-bold rounded-lg glow-btn text-xs flex items-center space-x-1 transition">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                <button id="uploadTriggerBtn" onclick="openUploadModal()" class="hidden px-3.5 py-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-black rounded-xl glow-btn text-xs flex items-center space-x-1.5 transition transform hover:scale-105">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
                     <span>上传资源</span>
                 </button>
-                <button id="adminBtn" onclick="toggleAdminMode()" class="px-3 py-1.5 rounded-lg text-xs font-medium transition bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/60 flex items-center space-x-1.5">
-                    <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                    <span id="adminBtnText">开启管理员模式</span>
+                <button id="adminBtn" onclick="toggleAdminMode()" class="px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-gray-900/90 hover:bg-gray-800 text-gray-300 border border-gray-700/80 flex items-center space-x-1.5 shadow-lg">
+                    <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    <span id="adminBtnText">管理员模式</span>
                 </button>
             </div>
         </div>
     </header>
 
     <!-- 主体内容 -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-4 space-y-3.5">
-        <!-- 搜索与分类控制台 -->
-        <div class="glass-panel rounded-xl p-3 space-y-2.5">
-            <div class="flex flex-col lg:flex-row gap-2.5 items-center justify-between">
-                <!-- 搜索框 -->
-                <div class="relative w-full lg:w-72">
-                    <span class="absolute inset-y-0 left-0 pl-2.5 flex items-center pointer-events-none">
-                        <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 space-y-5">
+        
+        <!-- 搜索与高科技分类控制台 -->
+        <div class="glass-panel rounded-2xl p-4 space-y-3.5 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="flex flex-col lg:flex-row gap-3 items-center justify-between relative z-10">
+                <!-- 科技感搜索框 -->
+                <div class="relative w-full lg:w-80">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                        <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </span>
-                    <input type="text" id="searchInput" oninput="filterResources()" placeholder="搜索资源/关键字..." class="w-full pl-8 pr-3 py-1 bg-gray-900/90 border border-gray-700/80 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 text-xs">
+                    <input type="text" id="searchInput" oninput="filterResources()" placeholder="输入MOD名称、关键字检索..." class="w-full pl-10 pr-4 py-2 bg-gray-950/80 border border-cyan-500/30 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 text-xs transition shadow-inner">
                 </div>
 
                 <!-- 分类标签页 -->
-                <div class="flex items-center space-x-1.5 overflow-x-auto w-full lg:w-auto no-scrollbar py-0.5" id="categoryTabs">
-                    <button onclick="setCategory('all')" class="category-tab px-2.5 py-1 rounded-lg text-xs font-medium transition bg-amber-500 text-black font-bold shrink-0" data-cat="all">全部</button>
-                    <button onclick="setCategory('maps')" class="category-tab px-2.5 py-1 rounded-lg text-xs font-medium transition bg-gray-800/80 text-gray-300 hover:bg-gray-700 shrink-0" data-cat="maps">🗺️ 地图地形</button>
-                    <button onclick="setCategory('weather')" class="category-tab px-2.5 py-1 rounded-lg text-xs font-medium transition bg-gray-800/80 text-gray-300 hover:bg-gray-700 shrink-0" data-cat="weather">🌤️ 天气效果</button>
-                    <button onclick="setCategory('emblems')" class="category-tab px-2.5 py-1 rounded-lg text-xs font-medium transition bg-gray-800/80 text-gray-300 hover:bg-gray-700 shrink-0" data-cat="emblems">🛡️ 专属纹章</button>
-                    <button onclick="setCategory('effects')" class="category-tab px-2.5 py-1 rounded-lg text-xs font-medium transition bg-gray-800/80 text-gray-300 hover:bg-gray-700 shrink-0" data-cat="effects">✨ 地图特效</button>
-                    <button onclick="setCategory('wards')" class="category-tab px-2.5 py-1 rounded-lg text-xs font-medium transition bg-gray-800/80 text-gray-300 hover:bg-gray-700 shrink-0" data-cat="wards">👁️ 守卫眼位</button>
-                    <button onclick="setCategory('couriers')" class="category-tab px-2.5 py-1 rounded-lg text-xs font-medium transition bg-gray-800/80 text-gray-300 hover:bg-gray-700 shrink-0" data-cat="couriers">🐴 战术信使</button>
-                    <button onclick="setCategory('arcana')" class="category-tab px-2.5 py-1 rounded-lg text-xs font-medium transition bg-gray-800/80 text-gray-300 hover:bg-gray-700 shrink-0" data-cat="arcana">👑 英雄至宝</button>
-                    <button onclick="setCategory('personas')" class="category-tab px-2.5 py-1 rounded-lg text-xs font-medium transition bg-gray-800/80 text-gray-300 hover:bg-gray-700 shrink-0" data-cat="personas">🎭 英雄身心</button>
+                <div class="flex items-center space-x-2 overflow-x-auto w-full lg:w-auto no-scrollbar py-1" id="categoryTabs">
+                    <button onclick="setCategory('all')" class="category-tab px-3 py-1.5 rounded-xl text-xs font-bold transition bg-amber-500 text-black shadow-lg shadow-amber-500/20 shrink-0" data-cat="all">全部</button>
+                    <button onclick="setCategory('maps')" class="category-tab px-3 py-1.5 rounded-xl text-xs font-medium transition bg-gray-900/80 text-gray-300 hover:bg-gray-800 border border-gray-800 shrink-0" data-cat="maps">🗺️ 地图地形</button>
+                    <button onclick="setCategory('weather')" class="category-tab px-3 py-1.5 rounded-xl text-xs font-medium transition bg-gray-900/80 text-gray-300 hover:bg-gray-800 border border-gray-800 shrink-0" data-cat="weather">🌤️ 天气效果</button>
+                    <button onclick="setCategory('emblems')" class="category-tab px-3 py-1.5 rounded-xl text-xs font-medium transition bg-gray-900/80 text-gray-300 hover:bg-gray-800 border border-gray-800 shrink-0" data-cat="emblems">🛡️ 专属纹章</button>
+                    <button onclick="setCategory('effects')" class="category-tab px-3 py-1.5 rounded-xl text-xs font-medium transition bg-gray-900/80 text-gray-300 hover:bg-gray-800 border border-gray-800 shrink-0" data-cat="effects">✨ 地图特效</button>
+                    <button onclick="setCategory('wards')" class="category-tab px-3 py-1.5 rounded-xl text-xs font-medium transition bg-gray-900/80 text-gray-300 hover:bg-gray-800 border border-gray-800 shrink-0" data-cat="wards">👁️ 守卫眼位</button>
+                    <button onclick="setCategory('couriers')" class="category-tab px-3 py-1.5 rounded-xl text-xs font-medium transition bg-gray-900/80 text-gray-300 hover:bg-gray-800 border border-gray-800 shrink-0" data-cat="couriers">🐴 战术信使</button>
+                    <button onclick="setCategory('arcana')" class="category-tab px-3 py-1.5 rounded-xl text-xs font-medium transition bg-gray-900/80 text-gray-300 hover:bg-gray-800 border border-gray-800 shrink-0" data-cat="arcana">👑 英雄至宝</button>
+                    <button onclick="setCategory('personas')" class="category-tab px-3 py-1.5 rounded-xl text-xs font-medium transition bg-gray-900/80 text-gray-300 hover:bg-gray-800 border border-gray-800 shrink-0" data-cat="personas">🎭 英雄身心</button>
                 </div>
             </div>
         </div>
 
-        <!-- 紧凑型展示网格 -->
-        <div id="resourceGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5">
+        <!-- 动态资源网格展示区 -->
+        <div id="resourceGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             <!-- 动态渲染 -->
         </div>
     </main>
 
-    <!-- 页脚 -->
-    <footer class="border-t border-gray-800/60 mt-10 py-4 text-center text-[11px] text-gray-600">
-        <p>小猴子的百变MOD云端分发平台 &copy; 2026 | 多端实时安全同步</p>
+    <!-- 底部 -->
+    <footer class="tech-footer border-t border-gray-800/80 mt-16 py-6 text-center text-xs text-gray-500">
+        <p class="tracking-wider">小猴子的百变MOD云端分发终端 &copy; 2026 | Cloudflare Edge Secured</p>
     </footer>
 
     <!-- 上传/添加资源弹窗 -->
-    <div id="uploadModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-3">
-        <div class="glass-panel rounded-xl max-w-md w-full p-5 space-y-4 border border-gray-700 shadow-2xl relative">
+    <div id="uploadModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-3">
+        <div class="glass-panel rounded-2xl max-w-md w-full p-6 space-y-4 border border-cyan-500/30 shadow-2xl relative">
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-amber-500 via-cyan-500 to-amber-500"></div>
+            
             <div class="flex justify-between items-center pb-2 border-b border-gray-800">
-                <h3 class="text-sm font-bold text-white flex items-center space-x-1.5">
-                    <span>添加/上传新资源</span>
+                <h3 class="text-sm font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-amber-400 flex items-center space-x-2">
+                    <span>⚡ 上传/添加全新 MOD 资源</span>
                 </h3>
-                <button onclick="closeUploadModal()" class="text-gray-400 hover:text-white text-lg font-bold leading-none">&times;</button>
+                <button onclick="closeUploadModal()" class="text-gray-400 hover:text-white text-xl font-bold leading-none">&times;</button>
             </div>
 
-            <form id="uploadForm" onsubmit="handleUploadSubmit(event)" class="space-y-3 text-xs">
+            <form id="uploadForm" onsubmit="handleUploadSubmit(event)" class="space-y-3.5 text-xs">
                 <div>
-                    <label class="block text-[11px] font-medium text-gray-400 mb-1">资源名称</label>
-                    <input type="text" id="resTitle" required class="w-full px-3 py-1.5 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-amber-500" placeholder="例如：暗夜黑森林高级地形包">
+                    <label class="block text-[11px] font-semibold text-cyan-400 mb-1 uppercase tracking-wider">资源名称</label>
+                    <input type="text" id="resTitle" required class="w-full px-3.5 py-2 bg-gray-950 border border-gray-800 rounded-xl text-white focus:outline-none focus:border-cyan-400 transition" placeholder="例如：暗夜黑森林高级地形包">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-medium text-gray-400 mb-1">资源分类</label>
-                    <select id="resCategory" class="w-full px-3 py-1.5 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-amber-500">
+                    <label class="block text-[11px] font-semibold text-cyan-400 mb-1 uppercase tracking-wider">资源分类</label>
+                    <select id="resCategory" class="w-full px-3.5 py-2 bg-gray-950 border border-gray-800 rounded-xl text-white focus:outline-none focus:border-cyan-400 transition">
                         <option value="maps">🗺️ 地图地形 (Maps)</option>
                         <option value="weather">🌤️ 天气效果 (Weather)</option>
                         <option value="emblems">🛡️ 专属纹章 (Emblems)</option>
@@ -106,27 +115,27 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-[11px] font-medium text-gray-400 mb-1">资源描述/说明</label>
-                    <textarea id="resDesc" rows="2" required class="w-full px-3 py-1.5 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-amber-500" placeholder="简短说明安装方法..."></textarea>
+                    <label class="block text-[11px] font-semibold text-cyan-400 mb-1 uppercase tracking-wider">资源描述/说明</label>
+                    <textarea id="resDesc" rows="2" required class="w-full px-3.5 py-2 bg-gray-950 border border-gray-800 rounded-xl text-white focus:outline-none focus:border-cyan-400 transition" placeholder="简短说明安装方法..."></textarea>
                 </div>
                 <div>
-                    <label class="block text-[11px] font-medium text-gray-400 mb-1">封面图片 (本地上传或留空)</label>
-                    <input type="file" id="resImage" accept="image/*" class="w-full text-[11px] text-gray-400 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[11px] file:font-semibold file:bg-gray-800 file:text-amber-400 hover:file:bg-gray-700 cursor-pointer">
+                    <label class="block text-[11px] font-semibold text-cyan-400 mb-1 uppercase tracking-wider">封面图片 (本地上传或留空)</label>
+                    <input type="file" id="resImage" accept="image/*" class="w-full text-xs text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-gray-800 file:text-amber-400 hover:file:bg-gray-700 cursor-pointer">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-medium text-gray-400 mb-1">下载直链 / 蓝奏云网盘地址</label>
-                    <input type="text" id="resLink" required class="w-full px-3 py-1.5 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-amber-500" placeholder="粘贴蓝奏云/网盘链接">
+                    <label class="block text-[11px] font-semibold text-cyan-400 mb-1 uppercase tracking-wider">下载直链 / 蓝奏云网盘地址</label>
+                    <input type="text" id="resLink" required class="w-full px-3.5 py-2 bg-gray-950 border border-gray-800 rounded-xl text-white focus:outline-none focus:border-cyan-400 transition" placeholder="粘贴蓝奏云/网盘链接">
                 </div>
 
-                <div class="flex justify-end space-x-2 pt-2">
-                    <button type="button" onclick="closeUploadModal()" class="px-4 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition">取消</button>
-                    <button type="submit" id="saveBtn" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-lg transition">确认保存并同步云端</button>
+                <div class="flex justify-end space-x-2 pt-3">
+                    <button type="button" onclick="closeUploadModal()" class="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-gray-300 rounded-xl transition">取消</button>
+                    <button type="submit" id="saveBtn" class="px-5 py-2 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-black font-black rounded-xl transition shadow-lg shadow-amber-500/20">确认保存并同步云端</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- 引入自定义逻辑脚本 -->
+    <!-- 脚本 -->
     <script src="script.js"></script>
 </body>
 </html>
