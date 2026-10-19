@@ -3,101 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOTA 2 专案云端工坊</title>
+    <title>小猴子的百变MOD</title>
+    <!-- 网站图标 (Monkey King 风格) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230f1520'/><circle cx='50' cy='50' r='36' fill='%23f59e0b' opacity='0.2'/><text y='.78em' font-size='60' x='15'>🐒</text></svg>">
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
-        body { font-family: 'Noto Sans SC', sans-serif; background-color: #0b0f19; color: #f3f4f6; }
-        .glass-card { background: rgba(17, 24, 39, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
-        .glow-btn { box-shadow: 0 0 20px rgba(234, 179, 8, 0.25); transition: all 0.3s ease; }
-        .glow-btn:hover { box-shadow: 0 0 30px rgba(234, 179, 8, 0.5); }
+        body { font-family: 'Noto Sans SC', sans-serif; background-color: #080b11; color: #e5e7eb; }
+        .glass-panel { background: rgba(15, 21, 32, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.07); }
+        .glass-card { background: rgba(18, 26, 40, 0.7); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .glass-card:hover { border-color: rgba(245, 158, 11, 0.4); box-shadow: 0 8px 25px -5px rgba(245, 158, 11, 0.15); }
+        .glow-btn { box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
+        .glow-btn:hover { box-shadow: 0 0 25px rgba(245, 158, 11, 0.5); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-black">
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-black text-sm">
 
     <!-- 顶栏导航 -->
-    <header class="glass-card sticky top-0 z-40 border-b border-gray-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 to-yellow-400 flex items-center justify-center font-black text-black text-xl shadow-lg">D2</div>
-                <div>
-                    <h1 class="text-xl font-bold tracking-wider text-white">DOTA 2 专案云端工坊</h1>
-                    <p class="text-xs text-gray-400">地图 • 天气 • 纹章 • 效果极速分发平台</p>
+    <header class="glass-panel sticky top-0 z-40 border-b border-gray-800/80">
+        <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+            <div class="flex items-center space-x-2.5">
+                <!-- 顶栏大圣猴子图标 -->
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-amber-700 via-amber-500 to-yellow-400 flex items-center justify-center font-black text-black text-base shadow-md overflow-hidden border border-amber-400/40">
+                    <span class="text-base">🐒</span>
+                </div>
+                <div class="flex items-baseline space-x-2">
+                    <h1 class="text-base font-bold tracking-wider text-white">小猴子的百变MOD</h1>
+                    <span class="text-[11px] text-amber-400/80 hidden sm:inline-block">| 地图 • 天气 • 纹章 • 特效</span>
                 </div>
             </div>
-            <div class="flex items-center space-x-4">
-                <button id="adminBtn" onclick="toggleAdminMode()" class="px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700 flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                    <span id="adminBtnText">管理员模式</span>
+            <div class="flex items-center space-x-3">
+                <button id="uploadTriggerBtn" onclick="openUploadModal()" class="hidden px-3 py-1.5 bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-bold rounded-lg glow-btn text-xs flex items-center space-x-1 transition">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                    <span>上传资源</span>
+                </button>
+                <button id="adminBtn" onclick="toggleAdminMode()" class="px-3 py-1.5 rounded-lg text-xs font-medium transition bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/60 flex items-center space-x-1.5">
+                    <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    <span id="adminBtnText">开启管理员模式</span>
                 </button>
             </div>
         </div>
     </header>
 
     <!-- 主体内容 -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        <!-- 搜索与筛选头部 -->
-        <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-wide">探索与下载 Dota 2 精美定制资源</h2>
-                    <p class="text-sm text-gray-400 mt-1">云端极速分发，点击即可无缝下载专属游戏补丁与资源。</p>
-                </div>
-                <button id="uploadTriggerBtn" onclick="openUploadModal()" class="hidden px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-bold rounded-xl glow-btn flex items-center space-x-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    <span>上传新资源</span>
-                </button>
-            </div>
-
-            <!-- 搜索框与分类标签 -->
-            <div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
-                <div class="relative w-full lg:w-96">
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-5 space-y-4">
+        
+        <!-- 搜索与分类导航控制台 -->
+        <div class="glass-panel rounded-xl p-3.5 space-y-3">
+            <div class="flex flex-col md:flex-row gap-3 items-center justify-between">
+                <div class="relative w-full md:w-80">
                     <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </span>
-                    <input type="text" id="searchInput" oninput="filterResources()" placeholder="搜索资源名称、描述..." class="w-full pl-10 pr-4 py-3 bg-gray-900/80 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 text-sm">
+                    <input type="text" id="searchInput" oninput="filterResources()" placeholder="输入名字/描述快速查找..." class="w-full pl-9 pr-3 py-1.5 bg-gray-900/90 border border-gray-700/80 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 text-xs">
                 </div>
-                <div class="flex flex-wrap gap-2 w-full lg:w-auto" id="categoryTabs">
-                    <button onclick="setCategory('all')" class="category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-amber-500 text-black font-bold" data-cat="all">全部资源</button>
-                    <button onclick="setCategory('maps')" class="category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-800 text-gray-300 hover:bg-gray-700" data-cat="maps">🗺️ 地图地形</button>
-                    <button onclick="setCategory('weather')" class="category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-800 text-gray-300 hover:bg-gray-700" data-cat="weather">🌤️ 天气效果</button>
-                    <button onclick="setCategory('emblems')" class="category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-800 text-gray-300 hover:bg-gray-700" data-cat="emblems">🛡️ 专属纹章</button>
-                    <button onclick="setCategory('effects')" class="category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-800 text-gray-300 hover:bg-gray-700" data-cat="effects">✨ 地图特效</button>
+
+                <div class="flex items-center space-x-1.5 overflow-x-auto w-full md:w-auto no-scrollbar py-0.5" id="categoryTabs">
+                    <button onclick="setCategory('all')" class="category-tab px-3 py-1.5 rounded-lg text-xs font-medium transition bg-amber-500 text-black font-bold shrink-0" data-cat="all">全部</button>
+                    <button onclick="setCategory('maps')" class="category-tab px-3 py-1.5 rounded-lg text-xs font-medium transition bg-gray-800/80 text-gray-300 hover:bg-gray-700 shrink-0" data-cat="maps">🗺️ 地图地形</button>
+                    <button onclick="setCategory('weather')" class="category-tab px-3 py-1.5 rounded-lg text-xs font-medium transition bg-gray-800/80 text-gray-300 hover:bg-gray-700 shrink-0" data-cat="weather">🌤️ 天气效果</button>
+                    <button onclick="setCategory('emblems')" class="category-tab px-3 py-1.5 rounded-lg text-xs font-medium transition bg-gray-800/80 text-gray-300 hover:bg-gray-700 shrink-0" data-cat="emblems">🛡️ 专属纹章</button>
+                    <button onclick="setCategory('effects')" class="category-tab px-3 py-1.5 rounded-lg text-xs font-medium transition bg-gray-800/80 text-gray-300 hover:bg-gray-700 shrink-0" data-cat="effects">✨ 地图特效</button>
                 </div>
             </div>
         </div>
 
-        <!-- 资源卡片展示网格 -->
-        <div id="resourceGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <!-- 紧凑型网格展示区 -->
+        <div id="resourceGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5">
             <!-- 动态渲染 -->
         </div>
     </main>
 
-    <!-- 页脚 -->
-    <footer class="border-t border-gray-800 mt-20 py-8 text-center text-xs text-gray-500">
-        <p>DOTA 2 专案云端分发平台 &copy; 2026 | Cloudflare Edge Accelerated</p>
+    <!-- 底部 -->
+    <footer class="border-t border-gray-800/60 mt-10 py-4 text-center text-[11px] text-gray-600">
+        <p>小猴子的百变MOD云端分发平台 &copy; 2026 | Cloudflare 边缘代理加速</p>
     </footer>
 
     <!-- 上传/添加资源弹窗 -->
-    <div id="uploadModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="glass-card rounded-2xl max-w-lg w-full p-6 sm:p-8 space-y-6 border border-gray-700 shadow-2xl relative">
-            <div class="flex justify-between items-center">
-                <h3 class="text-xl font-bold text-white flex items-center space-x-2">
-                    <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                    <span>上传/添加新资源</span>
+    <div id="uploadModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-3">
+        <div class="glass-panel rounded-xl max-w-md w-full p-5 space-y-4 border border-gray-700 shadow-2xl relative">
+            <div class="flex justify-between items-center pb-2 border-b border-gray-800">
+                <h3 class="text-sm font-bold text-white flex items-center space-x-1.5">
+                    <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    <span>添加/上传新资源</span>
                 </h3>
-                <button onclick="closeUploadModal()" class="text-gray-400 hover:text-white text-xl font-bold">&times;</button>
+                <button onclick="closeUploadModal()" class="text-gray-400 hover:text-white text-lg font-bold leading-none">&times;</button>
             </div>
 
-            <form id="uploadForm" onsubmit="handleUploadSubmit(event)" class="space-y-4">
+            <form id="uploadForm" onsubmit="handleUploadSubmit(event)" class="space-y-3 text-xs">
                 <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">资源名称 (Title)</label>
-                    <input type="text" id="resTitle" required class="w-full px-4 py-2.5 bg-gray-900 border border-gray-700 rounded-xl text-white text-sm focus:outline-none focus:border-amber-500" placeholder="例如：暗夜黑森林高级地形包">
+                    <label class="block text-[11px] font-medium text-gray-400 mb-1">资源名称</label>
+                    <input type="text" id="resTitle" required class="w-full px-3 py-1.5 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-amber-500" placeholder="例如：暗夜黑森林高级地形包">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">资源分类 (Category)</label>
-                    <select id="resCategory" class="w-full px-4 py-2.5 bg-gray-900 border border-gray-700 rounded-xl text-white text-sm focus:outline-none focus:border-amber-500">
+                    <label class="block text-[11px] font-medium text-gray-400 mb-1">资源分类</label>
+                    <select id="resCategory" class="w-full px-3 py-1.5 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-amber-500">
                         <option value="maps">🗺️ 地图地形 (Maps)</option>
                         <option value="weather">🌤️ 天气效果 (Weather)</option>
                         <option value="emblems">🛡️ 专属纹章 (Emblems)</option>
@@ -105,50 +108,47 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">资源描述 (Description)</label>
-                    <textarea id="resDesc" rows="3" required class="w-full px-4 py-2.5 bg-gray-900 border border-gray-700 rounded-xl text-white text-sm focus:outline-none focus:border-amber-500" placeholder="简单介绍该资源的特色、版本或安装注意事项..."></textarea>
+                    <label class="block text-[11px] font-medium text-gray-400 mb-1">资源描述/说明</label>
+                    <textarea id="resDesc" rows="2" required class="w-full px-3 py-1.5 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-amber-500" placeholder="简短说明安装方法或适用版本..."></textarea>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">封面预览图片 (支持本地图片上传)</label>
-                    <input type="file" id="resImage" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-gray-800 file:text-amber-400 hover:file:bg-gray-700 cursor-pointer">
+                    <label class="block text-[11px] font-medium text-gray-400 mb-1">封面图片 (选择本地图片或留空)</label>
+                    <input type="file" id="resImage" accept="image/*" class="w-full text-[11px] text-gray-400 file:mr-2 file:py-1 file:px-2.5 file:rounded-lg file:border-0 file:text-[11px] file:font-semibold file:bg-gray-800 file:text-amber-400 hover:file:bg-gray-700 cursor-pointer">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">下载直链 / 网盘地址 (支持蓝奏云、百度网盘、直链等)</label>
-                    <input type="text" id="resLink" required class="w-full px-4 py-2.5 bg-gray-900 border border-gray-700 rounded-xl text-white text-sm focus:outline-none focus:border-amber-500" placeholder="例如：https://lanzoui.com/xxxxx 或网盘分享链接">
+                    <label class="block text-[11px] font-medium text-gray-400 mb-1">下载直链 / 蓝奏云网盘地址</label>
+                    <input type="text" id="resLink" required class="w-full px-3 py-1.5 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-amber-500" placeholder="粘贴蓝奏云/直链，例如 https://lanzoui.com/xxx">
                 </div>
 
-                <div class="flex justify-end space-x-3 pt-4">
-                    <button type="button" onclick="closeUploadModal()" class="px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 font-medium rounded-xl text-sm transition">取消</button>
-                    <button type="submit" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-sm transition">确认添加</button>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="closeUploadModal()" class="px-4 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-lg transition">取消</button>
+                    <button type="submit" class="px-4 py-1.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-lg transition">确认保存</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- 脚本逻辑 -->
+    <!-- 逻辑脚本 -->
     <script>
         let isAdmin = false;
         let currentCategory = 'all';
 
-        // 默认初始化示例数据
         let resources = JSON.parse(localStorage.getItem('dota_resources')) || [
             {
                 id: 1,
                 title: "秋季枫红高级地图地形包",
                 category: "maps",
-                desc: "完美还原完美世界秋季枫叶地图氛围，野区视野清晰，粒子特效精美无卡顿。",
-                image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80",
-                link: "#",
-                date: "2026-10-19"
+                desc: "完美还原秋季枫叶地图氛围，视野清晰。",
+                image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80",
+                link: "#"
             },
             {
                 id: 2,
                 title: "疾风骤雨暗夜雷暴天气",
                 category: "weather",
-                desc: "经典雷暴雨天气效果，伴随闪电音效与雨滴溅射，沉浸感拉满。",
-                image: "https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=600&q=80",
-                link: "#",
-                date: "2026-10-19"
+                desc: "经典雷暴雨天气效果，沉浸感拉满。",
+                image: "https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=400&q=80",
+                link: "#"
             }
         ];
 
@@ -156,30 +156,38 @@
             localStorage.setItem('dota_resources', JSON.stringify(resources));
         }
 
-        // 切换管理员模式
         function toggleAdminMode() {
             if (!isAdmin) {
                 const pwd = prompt("请输入管理员密码：");
                 if (pwd === "1q2w3e4rghzs12..GH") {
                     isAdmin = true;
-                    document.getElementById('adminBtn').classList.remove('bg-gray-800', 'text-gray-300');
-                    document.getElementById('adminBtn').classList.add('bg-amber-500/20', 'text-amber-400', 'border-amber-500');
-                    document.getElementById('adminBtnText').innerText = "已开启管理员模式";
-                    document.getElementById('uploadTriggerBtn').classList.remove('hidden');
-                    renderResources();
-                    alert("管理员模式开启成功！现在可以添加与删除资源。");
+                    updateAdminUI();
+                    alert("✅ 管理员模式已开启！已解锁删除与上传权限。");
                 } else if (pwd !== null) {
-                    alert("管理员密码错误！");
+                    alert("❌ 管理员密码错误！");
                 }
             } else {
                 isAdmin = false;
-                document.getElementById('adminBtn').classList.add('bg-gray-800', 'text-gray-300');
-                document.getElementById('adminBtn').classList.remove('bg-amber-500/20', 'text-amber-400', 'border-amber-500');
-                document.getElementById('adminBtnText').innerText = "管理员模式";
-                document.getElementById('uploadTriggerBtn').classList.add('hidden');
-                renderResources();
+                updateAdminUI();
                 alert("已退出管理员模式。");
             }
+        }
+
+        function updateAdminUI() {
+            const adminBtn = document.getElementById('adminBtn');
+            const adminBtnText = document.getElementById('adminBtnText');
+            const uploadBtn = document.getElementById('uploadTriggerBtn');
+
+            if (isAdmin) {
+                adminBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium transition bg-amber-500/20 text-amber-400 border border-amber-500 flex items-center space-x-1.5";
+                adminBtnText.innerText = "退出管理员";
+                uploadBtn.classList.remove('hidden');
+            } else {
+                adminBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium transition bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/60 flex items-center space-x-1.5";
+                adminBtnText.innerText = "开启管理员模式";
+                uploadBtn.classList.add('hidden');
+            }
+            renderResources();
         }
 
         function openUploadModal() {
@@ -195,9 +203,9 @@
             currentCategory = cat;
             document.querySelectorAll('.category-tab').forEach(tab => {
                 if (tab.dataset.cat === cat) {
-                    tab.className = "category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-amber-500 text-black font-bold";
+                    tab.className = "category-tab px-3 py-1.5 rounded-lg text-xs font-medium transition bg-amber-500 text-black font-bold shrink-0";
                 } else {
-                    tab.className = "category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-800 text-gray-300 hover:bg-gray-700";
+                    tab.className = "category-tab px-3 py-1.5 rounded-lg text-xs font-medium transition bg-gray-800/80 text-gray-300 hover:bg-gray-700 shrink-0";
                 }
             });
             renderResources();
@@ -218,8 +226,7 @@
                 };
                 reader.readAsDataURL(imageFile);
             } else {
-                // 默认占位图
-                const defaultImg = "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80";
+                const defaultImg = "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80";
                 addNewResource(title, category, desc, defaultImg, link);
             }
         }
@@ -231,14 +238,13 @@
                 category,
                 desc,
                 image,
-                link,
-                date: new Date().toISOString().split('T')[0]
+                link
             };
             resources.unshift(newRes);
             saveToStorage();
             closeUploadModal();
             renderResources();
-            alert("资源添加成功！");
+            alert("🎉 资源发布成功！");
         }
 
         function deleteResource(id) {
@@ -265,9 +271,8 @@
 
             if (filtered.length === 0) {
                 grid.innerHTML = `
-                    <div class="col-span-full py-16 text-center text-gray-500">
-                        <svg class="w-16 h-16 mx-auto mb-4 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
-                        <p class="text-base font-medium">没有找到相关资源</p>
+                    <div class="col-span-full py-12 text-center text-gray-500">
+                        <p class="text-xs">暂无相关资源或未找到搜索结果</p>
                     </div>
                 `;
                 return;
@@ -275,33 +280,33 @@
 
             grid.innerHTML = filtered.map(item => {
                 let catLabel = '';
-                if(item.category === 'maps') catLabel = '🗺️ 地图地形';
-                else if(item.category === 'weather') catLabel = '🌤️ 天气效果';
-                else if(item.category === 'emblems') catLabel = '🛡️ 专属纹章';
-                else if(item.category === 'effects') catLabel = '✨ 地图特效';
+                if(item.category === 'maps') catLabel = '地图';
+                else if(item.category === 'weather') catLabel = '天气';
+                else if(item.category === 'emblems') catLabel = '纹章';
+                else if(item.category === 'effects') catLabel = '特效';
 
                 return `
-                    <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between border border-gray-800 hover:border-amber-500/50 transition duration-300 group">
+                    <div class="glass-card rounded-xl overflow-hidden flex flex-col justify-between transition duration-200 group relative">
                         <div>
-                            <div class="relative h-48 overflow-hidden bg-gray-900">
-                                <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                                <span class="absolute top-3 left-3 px-3 py-1 bg-black/60 backdrop-blur-md rounded-lg text-xs font-semibold text-amber-400 border border-white/10">${catLabel}</span>
+                            <div class="relative h-28 overflow-hidden bg-gray-900">
+                                <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                                <span class="absolute top-1.5 left-1.5 px-2 py-0.5 bg-black/70 backdrop-blur-md rounded text-[10px] font-semibold text-amber-400 border border-white/10">${catLabel}</span>
+                                ${isAdmin ? `
+                                    <button onclick="deleteResource(${item.id})" class="absolute top-1.5 right-1.5 p-1 bg-red-600/80 hover:bg-red-600 text-white rounded transition shadow" title="删除资源">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                    </button>
+                                ` : ''}
                             </div>
-                            <div class="p-5 space-y-2">
-                                <h3 class="text-lg font-bold text-white line-clamp-1 group-hover:text-amber-400 transition">${item.title}</h3>
-                                <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed">${item.desc}</p>
+                            <div class="p-2.5 space-y-1">
+                                <h3 class="text-xs font-bold text-white line-clamp-1 group-hover:text-amber-400 transition" title="${item.title}">${item.title}</h3>
+                                <p class="text-[11px] text-gray-400 line-clamp-2 leading-tight">${item.desc}</p>
                             </div>
                         </div>
-                        <div class="p-5 pt-0 flex items-center justify-between gap-3">
-                            <a href="${item.link}" target="_blank" class="flex-grow py-2.5 bg-gray-800 hover:bg-amber-500 hover:text-black text-white text-sm font-bold rounded-xl transition text-center flex items-center justify-center space-x-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                                <span>立即下载</span>
+                        <div class="p-2.5 pt-0">
+                            <a href="${item.link}" target="_blank" class="w-full py-1.5 bg-gray-800/90 hover:bg-amber-500 hover:text-black text-gray-200 text-xs font-bold rounded-lg transition text-center flex items-center justify-center space-x-1 border border-gray-700/50">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                <span>下载资源</span>
                             </a>
-                            ${isAdmin ? `
-                                <button onclick="deleteResource(${item.id})" class="px-3 py-2.5 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white rounded-xl transition border border-red-500/30" title="删除资源">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                                </button>
-                            ` : ''}
                         </div>
                     </div>
                 `;
