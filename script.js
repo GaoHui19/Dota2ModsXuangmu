@@ -94,37 +94,44 @@ function updateAdminUI() {
     const adminBtnText = document.getElementById('adminBtnText');
     const uploadBtn = document.getElementById('uploadTriggerBtn');
     const adminNoticeBar = document.getElementById('adminNoticeBar');
-    const guideBtnText = document.getElementById('guideBtnText');
+    const adminEditGuideBtn = document.getElementById('adminEditGuideBtn');
 
     if (isAdmin) {
         adminBtn.className = "px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-amber-500/20 text-amber-400 border border-amber-500 flex items-center space-x-1.5 shadow-lg shadow-amber-500/10";
         adminBtnText.innerText = "退出管理员";
         uploadBtn.classList.remove('hidden');
         if (adminNoticeBar) adminNoticeBar.classList.remove('hidden');
-        guideBtnText.innerText = "✏️ 编辑教程文章";
+        if (adminEditGuideBtn) adminEditGuideBtn.classList.remove('hidden');
     } else {
         adminBtn.className = "px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-gray-900/90 hover:bg-gray-800 text-gray-300 border border-gray-700/80 flex items-center space-x-1.5 shadow-lg";
         adminBtnText.innerText = "管理员模式";
         uploadBtn.classList.add('hidden');
         if (adminNoticeBar) adminNoticeBar.classList.add('hidden');
-        guideBtnText.innerText = "📖 教你安装MOD";
+        if (adminEditGuideBtn) adminEditGuideBtn.classList.add('hidden');
     }
     renderResources();
 }
 
-// 教学按钮点击逻辑：普通状态下打开阅读弹窗，管理员状态下打开编辑弹窗
-function handleGuideClick() {
-    if (isAdmin) {
-        document.getElementById('guideTextarea').value = guideArticle;
-        document.getElementById('editGuideModal').classList.remove('hidden');
-    } else {
-        document.getElementById('guideContentDisplay').innerHTML = guideArticle;
-        document.getElementById('guideModal').classList.remove('hidden');
-    }
+// 打开教程阅读弹窗
+function openGuideModal() {
+    document.getElementById('guideContentDisplay').innerHTML = guideArticle;
+    document.getElementById('guideModal').classList.remove('hidden');
 }
 
-function closeGuideModal() { document.getElementById('guideModal').classList.add('hidden'); }
-function closeEditGuideModal() { document.getElementById('editGuideModal').classList.add('hidden'); }
+function closeGuideModal() { 
+    document.getElementById('guideModal').classList.add('hidden'); 
+}
+
+// 打开编辑教程弹窗
+function openEditGuideModal() {
+    closeGuideModal();
+    document.getElementById('guideTextarea').value = guideArticle;
+    document.getElementById('editGuideModal').classList.remove('hidden');
+}
+
+function closeEditGuideModal() { 
+    document.getElementById('editGuideModal').classList.add('hidden'); 
+}
 
 // 提交编辑后的教程文章
 async function handleEditGuideSubmit(event) {
@@ -268,7 +275,7 @@ function renderResources() {
                 </div>
                 <div class="p-2 sm:p-2.5 pt-0">
                     <a href="${item.link}" target="_blank" class="w-full py-1.5 bg-gray-900 hover:bg-amber-500 hover:text-black text-cyan-300 text-[11px] font-black rounded-lg transition text-center flex items-center justify-center space-x-1 border border-cyan-500/20 group-hover:border-amber-500 shadow-md">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="root" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                         <span>一键下载</span>
                     </a>
                 </div>
