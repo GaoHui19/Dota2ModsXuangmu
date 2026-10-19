@@ -2,20 +2,12 @@
 const BIN_ID = '6ad5d3f1ffd5d1605377d5f8';
 const MASTER_KEY = '$2a$10$H6/1k6xZrhDZrng0EcZVyOYg3ZOBe5YmYZnO2iYMiVkJA1qv8UmXi';
 
-// 对应新密码 17610918671 的 SHA-256 哈希值
-const ADMIN_PWD_HASH = 'ba83d31481b7a695ddbd112d7d8eef0a8818556b68b0c61230cd70ae58e576be';
+// 直接设定管理员密码
+const ADMIN_PWD = '3109557692G';
 
 let isAdmin = false;
 let currentCategory = 'all';
 let resources = [];
-
-// SHA-256 哈希算法实现
-async function sha256(str) {
-    const buffer = new TextEncoder().encode(str);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
 
 // 防 XSS 过滤
 function sanitizeInput(str) {
@@ -58,15 +50,14 @@ async function syncToCloud() {
     }
 }
 
-// 切换管理员模式
-async function toggleAdminMode() {
+// 切换管理员模式（直接比对明文密码）
+function toggleAdminMode() {
     if (!isAdmin) {
         let inputPwd = prompt("请输入管理员密码：");
-        if (inputPwd) {
-            inputPwd = inputPwd.trim(); // 自动清理多余空格
+        if (inputPwd !== null) {
+            inputPwd = inputPwd.trim(); // 自动清理前后空格
             
-            const hashedInput = await sha256(inputPwd);
-            if (hashedInput === ADMIN_PWD_HASH) {
+            if (inputPwd === ADMIN_PWD) {
                 isAdmin = true;
                 updateAdminUI();
                 alert("✅ 管理员身份验证成功！");
