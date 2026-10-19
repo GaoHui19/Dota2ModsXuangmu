@@ -1,4 +1,4 @@
-// 🔑 云端数据库与密码 Key
+// 🔑 云端同步 API 配置
 const BIN_ID = '6ad5d3f1ffd5d1605377d5f8';
 const MASTER_KEY = '$2a$10$H6/1k6xZrhDZrng0EcZVyOYg3ZOBe5YmYZnO2iYMiVkJA1qv8UmXi';
 const ADMIN_PWD_HASH = 'f6c18f175402bd0b94a86121f1d1988ef1be4bd0453504ef5756c9a334eefed3'; // 对应密码：1q2w3e4rghzs12..GH
@@ -84,12 +84,12 @@ function updateAdminUI() {
     const uploadBtn = document.getElementById('uploadTriggerBtn');
 
     if (isAdmin) {
-        adminBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium transition bg-amber-500/20 text-amber-400 border border-amber-500 flex items-center space-x-1.5";
+        adminBtn.className = "px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-amber-500/20 text-amber-400 border border-amber-500 flex items-center space-x-1.5 shadow-lg shadow-amber-500/10";
         adminBtnText.innerText = "退出管理员";
         uploadBtn.classList.remove('hidden');
     } else {
-        adminBtn.className = "px-3 py-1.5 rounded-lg text-xs font-medium transition bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/60 flex items-center space-x-1.5";
-        adminBtnText.innerText = "开启管理员模式";
+        adminBtn.className = "px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-gray-900/90 hover:bg-gray-800 text-gray-300 border border-gray-700/80 flex items-center space-x-1.5 shadow-lg";
+        adminBtnText.innerText = "管理员模式";
         uploadBtn.classList.add('hidden');
     }
     renderResources();
@@ -103,9 +103,9 @@ function setCategory(cat) {
     currentCategory = cat;
     document.querySelectorAll('.category-tab').forEach(tab => {
         if (tab.dataset.cat === cat) {
-            tab.className = "category-tab px-2.5 py-1 rounded-lg text-xs font-medium transition bg-amber-500 text-black font-bold shrink-0";
+            tab.className = "category-tab px-3 py-1.5 rounded-xl text-xs font-bold transition bg-amber-500 text-black shadow-lg shadow-amber-500/20 shrink-0";
         } else {
-            tab.className = "category-tab px-2.5 py-1 rounded-lg text-xs font-medium transition bg-gray-800/80 text-gray-300 hover:bg-gray-700 shrink-0";
+            tab.className = "category-tab px-3 py-1.5 rounded-xl text-xs font-medium transition bg-gray-900/80 text-gray-300 hover:bg-gray-800 border border-gray-800 shrink-0";
         }
     });
     renderResources();
@@ -174,7 +174,7 @@ function getCategoryLabel(cat) {
     }
 }
 
-// 动态渲染资源列表（无内容时优雅显示“敬请期待”）
+// 渲染资源列表（无内容时显示优雅提示）
 function renderResources() {
     const grid = document.getElementById('resourceGrid');
     const searchKeyword = sanitizeInput(document.getElementById('searchInput').value.toLowerCase());
@@ -187,11 +187,11 @@ function renderResources() {
 
     if (filtered.length === 0) {
         grid.innerHTML = `
-            <div class="col-span-full py-16 text-center space-y-3">
-                <div class="w-12 h-12 mx-auto rounded-2xl bg-gray-800/80 border border-gray-700/60 flex items-center justify-center text-xl">✨</div>
+            <div class="col-span-full py-20 text-center space-y-3 glass-panel rounded-2xl border border-cyan-500/10">
+                <div class="w-14 h-14 mx-auto rounded-2xl bg-gray-900 border border-cyan-500/30 flex items-center justify-center text-2xl shadow-lg shadow-cyan-500/10 animate-pulse">✨</div>
                 <div class="space-y-1">
-                    <p class="text-xs font-bold text-amber-400 tracking-wider">暂无资源，敬请期待！</p>
-                    <p class="text-[11px] text-gray-500">该分类下暂未上传任何内容，猴哥正在加紧筹备中...</p>
+                    <p class="text-xs font-black text-amber-400 tracking-widest uppercase">暂无资源，敬请期待</p>
+                    <p class="text-[11px] text-gray-500">当前分类下暂未上架 MOD 补丁，猴哥正在整活中...</p>
                 </div>
             </div>
         `;
@@ -202,26 +202,27 @@ function renderResources() {
         let catLabel = getCategoryLabel(item.category);
 
         return `
-            <div class="glass-card rounded-xl overflow-hidden flex flex-col justify-between transition duration-200 group relative">
+            <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between group relative">
                 <div>
-                    <div class="relative h-28 overflow-hidden bg-gray-900">
-                        <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
-                        <span class="absolute top-1.5 left-1.5 px-2 py-0.5 bg-black/70 backdrop-blur-md rounded text-[10px] font-semibold text-amber-400 border border-white/10">${catLabel}</span>
+                    <div class="relative h-32 overflow-hidden bg-gray-950">
+                        <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent opacity-60"></div>
+                        <span class="absolute top-2 left-2 px-2.5 py-0.5 bg-black/75 backdrop-blur-md rounded-lg text-[10px] font-bold text-amber-400 border border-amber-500/30 shadow">${catLabel}</span>
                         ${isAdmin ? `
-                            <button onclick="deleteResource(${item.id})" class="absolute top-1.5 right-1.5 p-1 bg-red-600/80 hover:bg-red-600 text-white rounded transition shadow" title="删除资源">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            <button onclick="deleteResource(${item.id})" class="absolute top-2 right-2 p-1.5 bg-red-600/80 hover:bg-red-600 text-white rounded-xl transition shadow-lg" title="删除资源">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                             </button>
                         ` : ''}
                     </div>
-                    <div class="p-2.5 space-y-1">
-                        <h3 class="text-xs font-bold text-white line-clamp-1 group-hover:text-amber-400 transition" title="${item.title}">${item.title}</h3>
-                        <p class="text-[11px] text-gray-400 line-clamp-2 leading-tight">${item.desc}</p>
+                    <div class="p-3 space-y-1.5">
+                        <h3 class="text-xs font-black text-white line-clamp-1 group-hover:text-amber-400 transition" title="${item.title}">${item.title}</h3>
+                        <p class="text-[11px] text-gray-400 line-clamp-2 leading-relaxed">${item.desc}</p>
                     </div>
                 </div>
-                <div class="p-2.5 pt-0">
-                    <a href="${item.link}" target="_blank" class="w-full py-1.5 bg-gray-800/90 hover:bg-amber-500 hover:text-black text-gray-200 text-xs font-bold rounded-lg transition text-center flex items-center justify-center space-x-1 border border-gray-700/50">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                        <span>下载资源</span>
+                <div class="p-3 pt-0">
+                    <a href="${item.link}" target="_blank" class="w-full py-2 bg-gray-900 hover:bg-amber-500 hover:text-black text-cyan-300 text-xs font-black rounded-xl transition text-center flex items-center justify-center space-x-1.5 border border-cyan-500/20 group-hover:border-amber-500 shadow-md">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        <span>一键下载</span>
                     </a>
                 </div>
             </div>
@@ -229,5 +230,5 @@ function renderResources() {
     }).join('');
 }
 
-// 页面加载完成后自动拉取云端数据
+// 页面加载完成后拉取云端数据
 fetchFromCloud();
