@@ -1,63 +1,66 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
 
-/* 科技感空间背景与电竞网格纹理 */
+/* 深度荧光与赛博朋克空间背景 */
 body {
     font-family: 'Noto Sans SC', sans-serif;
     background-color: #030712;
     background-image: 
-        radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.08) 0%, transparent 50%),
-        radial-gradient(circle at 80% 90%, rgba(245, 158, 11, 0.06) 0%, transparent 40%),
-        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-    background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+        radial-gradient(circle at 15% 10%, rgba(14, 165, 233, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(245, 158, 11, 0.15) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.1) 0%, transparent 55%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 28px 28px, 28px 28px;
     color: #f3f4f6;
+    overflow-x: hidden;
 }
 
 /* 顶部科技感发光导航 */
 .tech-header {
-    background: rgba(3, 7, 18, 0.85);
+    background: rgba(3, 7, 18, 0.88);
     backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(14, 165, 233, 0.15);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(14, 165, 233, 0.25);
+    box-shadow: 0 4px 30px rgba(14, 165, 233, 0.12);
 }
 
-/* 高级毛玻璃面板 */
+/* 高级荧光毛玻璃面板 */
 .glass-panel {
-    background: rgba(11, 17, 32, 0.75);
+    background: rgba(11, 17, 32, 0.8);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(14, 165, 233, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(14, 165, 233, 0.06);
 }
 
-/* 科技感资源卡片 */
+/* 精致小巧的科技感资源卡片 */
 .glass-card {
-    background: rgba(13, 20, 36, 0.8);
+    background: rgba(13, 20, 36, 0.85);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-card:hover {
-    border-color: rgba(245, 158, 11, 0.5);
-    box-shadow: 0 10px 30px -5px rgba(245, 158, 11, 0.25), 0 0 15px rgba(14, 165, 233, 0.15);
-    transform: translateY(-2px);
+    border-color: rgba(245, 158, 11, 0.6);
+    box-shadow: 0 10px 30px -5px rgba(245, 158, 11, 0.35), 0 0 20px rgba(14, 165, 233, 0.35);
+    transform: translateY(-3px);
 }
 
 /* 按钮荧光发光效果 */
 .glow-btn {
-    box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
     transition: all 0.3s ease;
 }
 
 .glow-btn:hover {
-    box-shadow: 0 0 30px rgba(245, 158, 11, 0.7);
+    box-shadow: 0 0 35px rgba(245, 158, 11, 0.8), 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 /* 底部科技感 */
 .tech-footer {
-    background: rgba(3, 7, 18, 0.9);
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    background: rgba(3, 7, 18, 0.95);
+    border-top: 1px solid rgba(14, 165, 233, 0.2);
+    box-shadow: 0 -4px 20px rgba(14, 165, 233, 0.05);
 }
 
 /* 滚动条美化与隐藏 */
