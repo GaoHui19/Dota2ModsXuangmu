@@ -1,561 +1,315 @@
 <!DOCTYPE html>
-<html lang="zh-CN" class="dark">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dota 2 特效与地图资源库 | Dota 2 Resource Hub</title>
+    <title>DOTA 2 专案云端工坊</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        dota: {
-                            dark: '#0b0f19',
-                            card: '#141c2e',
-                            border: '#1f293d',
-                            accent: '#e0a838',
-                            accentHover: '#f5be4f',
-                            red: '#c23b22',
-                            green: '#2ecc71'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0b0f19;
-            color: #e5e7eb;
-        }
-        .dota-title {
-            font-family: 'Cinzel', serif;
-        }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0b0f19;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1f293d;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #e0a838;
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+        body { font-family: 'Noto Sans SC', sans-serif; background-color: #0b0f19; color: #f3f4f6; }
+        .glass-card { background: rgba(17, 24, 39, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glow-btn { box-shadow: 0 0 20px rgba(234, 179, 8, 0.25); transition: all 0.3s ease; }
+        .glow-btn:hover { box-shadow: 0 0 30px rgba(234, 179, 8, 0.5); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-amber-500 selection:text-black">
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-black">
 
-    <header class="sticky top-0 z-40 bg-dota-dark/90 backdrop-blur-md border-b border-dota-border">
+    <!-- 顶栏导航 -->
+    <header class="glass-card sticky top-0 z-40 border-b border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-red-600 flex items-center justify-center shadow-lg shadow-amber-500/20">
-                    <i class="fa-solid fa-chess-rook text-black text-xl"></i>
-                </div>
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-600 to-yellow-400 flex items-center justify-center font-black text-black text-xl shadow-lg">D2</div>
                 <div>
-                    <h1 class="dota-title text-xl font-bold tracking-wider text-amber-400">DOTA 2 资源百宝箱</h1>
-                    <p class="text-xs text-gray-400">Maps • Weather • Effigies • Effects</p>
+                    <h1 class="text-xl font-bold tracking-wider text-white">DOTA 2 专案云端工坊</h1>
+                    <p class="text-xs text-gray-400">地图 • 天气 • 纹章 • 效果极速分发平台</p>
                 </div>
             </div>
-
             <div class="flex items-center space-x-4">
-                <button id="adminModeToggleBtn" onclick="openAdminLoginModal()" class="flex items-center space-x-2 px-4 py-2 rounded-lg bg-dota-card hover:bg-dota-border border border-dota-border transition text-sm font-medium text-amber-400 shadow-sm">
-                    <i class="fa-solid fa-shield-halved" id="adminIcon"></i>
+                <button id="adminBtn" onclick="toggleAdminMode()" class="px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700 flex items-center space-x-2">
+                    <svg class="w-4 h-4 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                     <span id="adminBtnText">管理员模式</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-dota-card to-slate-900 border border-dota-border p-8 mb-8 shadow-2xl">
-            <div class="absolute -right-10 -bottom-10 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="relative z-10 max-w-2xl">
-                <span class="inline-block px-3 py-1 rounded-full bg-amber-500/10 text-amber-400 text-xs font-semibold uppercase tracking-wider mb-3 border border-amber-500/20">
-                    最新版本资源索引
-                </span>
-                <h2 class="dota-title text-3xl sm:text-4xl font-extrabold text-white mb-3">
-                    探索与下载 Dota 2 精美定制资源
-                </h2>
-                <p class="text-gray-400 text-sm sm:text-base mb-6">
-                    这里收录了全网最全的 Dota 2 地图、天气、纹章以及地图环境特效。支持一键直接下载，管理员可随时上传与管理资源。
-                </p>
-                
-                <!-- Search & Filters -->
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <div class="relative flex-grow">
-                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                        <input type="text" id="searchInput" oninput="filterResources()" placeholder="输入资源名称搜索（如：秋季地图、雨天...）" class="w-full bg-dota-dark/80 border border-dota-border rounded-xl pl-11 pr-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 transition">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex items-center space-x-2 overflow-x-auto pb-4 mb-6 no-scrollbar">
-            <button onclick="setCategory('all')" id="cat-all" class="category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-amber-500 text-black shadow-lg shadow-amber-500/20 whitespace-nowrap">
-                全部资源
-            </button>
-            <button onclick="setCategory('map')" id="cat-map" class="category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-dota-card text-gray-300 hover:bg-dota-border whitespace-nowrap">
-                🗺️ 地图地形 (Maps)
-            </button>
-            <button onclick="setCategory('weather')" id="cat-weather" class="category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-dota-card text-gray-300 hover:bg-dota-border whitespace-nowrap">
-                ☀️ 天气效果 (Weather)
-            </button>
-            <button onclick="setCategory('effigy')" id="cat-effigy" class="category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-dota-card text-gray-300 hover:bg-dota-border whitespace-nowrap">
-                ✨ 纹章装饰 (Effigies)
-            </button>
-            <button onclick="setCategory('effect')" id="cat-effect" class="category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-dota-card text-gray-300 hover:bg-dota-border whitespace-nowrap">
-                🌿 地图特效 (Map Effects)
-            </button>
-        </div>
-
-        <div id="adminActionBar" class="hidden mb-6 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-lg bg-amber-500 text-black flex items-center justify-center font-bold">
-                    <i class="fa-solid fa-crown"></i>
-                </div>
+    <!-- 主体内容 -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        <!-- 搜索与筛选头部 -->
+        <div class="glass-card rounded-2xl p-6 sm:p-8 space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h3 class="text-sm font-bold text-amber-400">管理员模式已激活</h3>
-                    <p class="text-xs text-gray-300">您可以上传本地资源文件、新增条目或删除已有资源。</p>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white tracking-wide">探索与下载 Dota 2 精美定制资源</h2>
+                    <p class="text-sm text-gray-400 mt-1">云端极速分发，点击即可无缝下载专属游戏补丁与资源。</p>
+                </div>
+                <button id="uploadTriggerBtn" onclick="openUploadModal()" class="hidden px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-bold rounded-xl glow-btn flex items-center space-x-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    <span>上传新资源</span>
+                </button>
+            </div>
+
+            <!-- 搜索框与分类标签 -->
+            <div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
+                <div class="relative w-full lg:w-96">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </span>
+                    <input type="text" id="searchInput" oninput="filterResources()" placeholder="搜索资源名称、描述..." class="w-full pl-10 pr-4 py-3 bg-gray-900/80 border border-gray-700 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 text-sm">
+                </div>
+                <div class="flex flex-wrap gap-2 w-full lg:w-auto" id="categoryTabs">
+                    <button onclick="setCategory('all')" class="category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-amber-500 text-black font-bold" data-cat="all">全部资源</button>
+                    <button onclick="setCategory('maps')" class="category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-800 text-gray-300 hover:bg-gray-700" data-cat="maps">🗺️ 地图地形</button>
+                    <button onclick="setCategory('weather')" class="category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-800 text-gray-300 hover:bg-gray-700" data-cat="weather">🌤️ 天气效果</button>
+                    <button onclick="setCategory('emblems')" class="category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-800 text-gray-300 hover:bg-gray-700" data-cat="emblems">🛡️ 专属纹章</button>
+                    <button onclick="setCategory('effects')" class="category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-800 text-gray-300 hover:bg-gray-700" data-cat="effects">✨ 地图特效</button>
                 </div>
             </div>
-            <button onclick="openUploadModal()" class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-black text-sm font-bold transition shadow-md flex items-center space-x-2">
-                <i class="fa-solid fa-cloud-arrow-up"></i>
-                <span>上传新资源</span>
-            </button>
         </div>
 
-        <div id="resourceGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Dynamic Cards inserted via JS -->
-        </div>
-
-        <div id="emptyState" class="hidden py-20 text-center">
-            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-dota-card border border-dota-border flex items-center justify-center text-gray-500 text-2xl">
-                <i class="fa-solid fa-box-open"></i>
-            </div>
-            <h3 class="text-lg font-bold text-white mb-1">未找到相关资源</h3>
-            <p class="text-sm text-gray-400">请尝试更换关键词或切换分类筛选。</p>
+        <!-- 资源卡片展示网格 -->
+        <div id="resourceGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- 动态渲染 -->
         </div>
     </main>
 
-    <footer class="bg-dota-dark border-t border-dota-border py-6 text-center text-xs text-gray-500 mt-12">
-        <p>Dota 2 Resource Hub &copy; 2026. Hosted on GitHub & Proxied via Cloudflare.</p>
-        <p class="mt-1">All Dota 2 assets and images belong to Valve Corporation.</p>
+    <!-- 页脚 -->
+    <footer class="border-t border-gray-800 mt-20 py-8 text-center text-xs text-gray-500">
+        <p>DOTA 2 专案云端分发平台 &copy; 2026 | Cloudflare Edge Accelerated</p>
     </footer>
 
-    <div id="adminLoginModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-dota-card border border-dota-border rounded-2xl w-full max-w-md p-6 shadow-2xl relative animate-in fade-in zoom-in duration-200">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="dota-title text-lg font-bold text-amber-400 flex items-center space-x-2">
-                    <i class="fa-solid fa-lock"></i>
-                    <span>管理员验证</span>
-                </h3>
-                <button onclick="closeAdminLoginModal()" class="text-gray-400 hover:text-white transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-            <p class="text-xs text-gray-400 mb-4">请输入管理员密码以开启管理权限（上传与删除）。</p>
-            <div class="mb-4">
-                <label class="block text-xs font-semibold text-gray-300 mb-1">管理员密码</label>
-                <input type="password" id="adminPasswordInput" placeholder="请输入密码..." class="w-full bg-dota-dark border border-dota-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-500 transition">
-            </div>
-            <div id="loginErrorMsg" class="text-xs text-red-500 mb-4 hidden">密码错误，请重新输入！</div>
-            <div class="flex justify-end space-x-3">
-                <button onclick="closeAdminLoginModal()" class="px-4 py-2 rounded-xl bg-dota-dark text-gray-300 hover:bg-dota-border text-sm font-medium transition">取消</button>
-                <button onclick="verifyAdminPassword()" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-sm font-bold transition shadow-lg shadow-amber-500/25">确认登录</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="uploadModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-dota-card border border-dota-border rounded-2xl w-full max-w-lg p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="dota-title text-lg font-bold text-amber-400 flex items-center space-x-2">
-                    <i class="fa-solid fa-cloud-arrow-up"></i>
+    <!-- 上传/添加资源弹窗 -->
+    <div id="uploadModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="glass-card rounded-2xl max-w-lg w-full p-6 sm:p-8 space-y-6 border border-gray-700 shadow-2xl relative">
+            <div class="flex justify-between items-center">
+                <h3 class="text-xl font-bold text-white flex items-center space-x-2">
+                    <svg class="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                     <span>上传/添加新资源</span>
                 </h3>
-                <button onclick="closeUploadModal()" class="text-gray-400 hover:text-white transition">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
+                <button onclick="closeUploadModal()" class="text-gray-400 hover:text-white text-xl font-bold">&times;</button>
             </div>
+
             <form id="uploadForm" onsubmit="handleUploadSubmit(event)" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1">资源名称 (Title)</label>
-                    <input type="text" id="uploadTitle" required placeholder="例如：神圣秋季地形地图 v2.4" class="w-full bg-dota-dark border border-dota-border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition">
+                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">资源名称 (Title)</label>
+                    <input type="text" id="resTitle" required class="w-full px-4 py-2.5 bg-gray-900 border border-gray-700 rounded-xl text-white text-sm focus:outline-none focus:border-amber-500" placeholder="例如：暗夜黑森林高级地形包">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1">资源分类 (Category)</label>
-                    <select id="uploadCategory" class="w-full bg-dota-dark border border-dota-border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition">
-                        <option value="map">🗺️ 地图地形 (Maps)</option>
-                        <option value="weather">☀️ 天气效果 (Weather)</option>
-                        <option value="effigy">✨ 纹章装饰 (Effigies)</option>
-                        <option value="effect">🌿 地图特效 (Map Effects)</option>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">资源分类 (Category)</label>
+                    <select id="resCategory" class="w-full px-4 py-2.5 bg-gray-900 border border-gray-700 rounded-xl text-white text-sm focus:outline-none focus:border-amber-500">
+                        <option value="maps">🗺️ 地图地形 (Maps)</option>
+                        <option value="weather">🌤️ 天气效果 (Weather)</option>
+                        <option value="emblems">🛡️ 专属纹章 (Emblems)</option>
+                        <option value="effects">✨ 地图特效 (Effects)</option>
                     </select>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1">资源描述 (Description)</label>
-                    <textarea id="uploadDesc" rows="3" required placeholder="请简要描述该资源的特点、适用版本..." class="w-full bg-dota-dark border border-dota-border rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500 transition"></textarea>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">资源描述 (Description)</label>
+                    <textarea id="resDesc" rows="3" required class="w-full px-4 py-2.5 bg-gray-900 border border-gray-700 rounded-xl text-white text-sm focus:outline-none focus:border-amber-500" placeholder="简单介绍该资源的特色、版本或安装注意事项..."></textarea>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1">预览图片 (支持本地图片上传)</label>
-                    <input type="file" id="uploadImageFile" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-500/10 file:text-amber-400 hover:file:bg-amber-500/20 cursor-pointer">
+                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">封面预览图片 (支持本地图片上传)</label>
+                    <input type="file" id="resImage" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-gray-800 file:text-amber-400 hover:file:bg-gray-700 cursor-pointer">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 mb-1">下载文件 / 资源压缩包 (支持本地文件上传)</label>
-                    <input type="file" id="uploadResourceFile" required class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-500/10 file:text-amber-400 hover:file:bg-amber-500/20 cursor-pointer">
+                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">下载直链 / 网盘地址 (支持蓝奏云、百度网盘、直链等)</label>
+                    <input type="text" id="resLink" required class="w-full px-4 py-2.5 bg-gray-900 border border-gray-700 rounded-xl text-white text-sm focus:outline-none focus:border-amber-500" placeholder="例如：https://lanzoui.com/xxxxx 或网盘分享链接">
                 </div>
-                <div class="flex justify-end space-x-3 pt-2">
-                    <button type="button" onclick="closeUploadModal()" class="px-4 py-2 rounded-xl bg-dota-dark text-gray-300 hover:bg-dota-border text-sm font-medium transition">取消</button>
-                    <button type="submit" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-sm font-bold transition shadow-lg shadow-amber-500/25">确认上传</button>
+
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeUploadModal()" class="px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-300 font-medium rounded-xl text-sm transition">取消</button>
+                    <button type="submit" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-bold rounded-xl text-sm transition">确认添加</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div id="toastModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-dota-card border border-dota-border rounded-2xl w-full max-w-sm p-6 shadow-2xl text-center">
-            <div id="toastIcon" class="w-12 h-12 mx-auto mb-3 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xl">
-                <i class="fa-solid fa-check"></i>
-            </div>
-            <h4 id="toastTitle" class="text-base font-bold text-white mb-1">操作成功</h4>
-            <p id="toastMessage" class="text-xs text-gray-400 mb-5">文件已成功处理。</p>
-            <button onclick="closeToast()" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-sm font-bold transition">确定</button>
-        </div>
-    </div>
-
+    <!-- 脚本逻辑 -->
     <script>
-        // Initial Mock Database
-        const defaultResources = [
+        let isAdmin = false;
+        let currentCategory = 'all';
+
+        // 默认初始化示例数据
+        let resources = JSON.parse(localStorage.getItem('dota_resources')) || [
             {
-                id: 'res-1',
-                title: '远古神圣秋季地形 (Fall Terrain v3)',
-                category: 'map',
-                description: 'Valve经典秋季地图重制版，金黄落叶与温暖色调，优化粒子特效与光影。',
-                image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80',
-                fileName: 'dota_autumn_terrain_v3.vpk',
-                fileSize: '142 MB',
-                uploadDate: '2026-03-10',
-                downloadData: null
+                id: 1,
+                title: "秋季枫红高级地图地形包",
+                category: "maps",
+                desc: "完美还原完美世界秋季枫叶地图氛围，野区视野清晰，粒子特效精美无卡顿。",
+                image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80",
+                link: "#",
+                date: "2026-10-19"
             },
             {
-                id: 'res-2',
-                title: '暴雨夜袭天气包 (Heavy Rain Weather Effect)',
-                category: 'weather',
-                description: '沉浸式暴雨与闪电雷鸣音效，带有逼真的水滴镜头折射效果，让战场更有氛围。',
-                image: 'https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=600&q=80',
-                fileName: 'weather_heavy_rain_fx.vpk',
-                fileSize: '45.8 MB',
-                uploadDate: '2026-03-12',
-                downloadData: null
-            },
-            {
-                id: 'res-3',
-                title: '烈焰之主定制纹章 (Flame Effigy Monument)',
-                category: 'effigy',
-                description: '炽热烈焰环绕的英雄雕像纹章，基地展示效果极其耀眼，支持全英雄适配。',
-                image: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80',
-                fileName: 'effigy_block_flame_v2.vpk',
-                fileSize: '18.2 MB',
-                uploadDate: '2026-03-15',
-                downloadData: null
-            },
-            {
-                id: 'res-4',
-                title: '春日樱花飘落环境特效 (Cherry Blossom Effect)',
-                category: 'effect',
-                description: '全地图河道及树木区域增加动态粉色樱花瓣飘落特效，视觉体验拉满。',
-                image: 'https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=600&q=80',
-                fileName: 'map_effect_sakura_petals.vpk',
-                fileSize: '32.4 MB',
-                uploadDate: '2026-03-18',
-                downloadData: null
+                id: 2,
+                title: "疾风骤雨暗夜雷暴天气",
+                category: "weather",
+                desc: "经典雷暴雨天气效果，伴随闪电音效与雨滴溅射，沉浸感拉满。",
+                image: "https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=600&q=80",
+                link: "#",
+                date: "2026-10-19"
             }
         ];
 
-        let resources = [];
-        let currentCategory = 'all';
-        let isAdminMode = false;
-
-        // Load state from localStorage or initialize
-        function initStorage() {
-            const saved = localStorage.getItem('dota_resources');
-            if (saved) {
-                try {
-                    resources = JSON.parse(saved);
-                } catch (e) {
-                    resources = defaultResources;
-                }
-            } else {
-                resources = defaultResources;
-                saveStorage();
-            }
-            renderResources();
-        }
-
-        function saveStorage() {
+        function saveToStorage() {
             localStorage.setItem('dota_resources', JSON.stringify(resources));
         }
 
-        // Category switching
+        // 切换管理员模式
+        function toggleAdminMode() {
+            if (!isAdmin) {
+                const pwd = prompt("请输入管理员密码：");
+                if (pwd === "1q2w3e4rghzs12..GH") {
+                    isAdmin = true;
+                    document.getElementById('adminBtn').classList.remove('bg-gray-800', 'text-gray-300');
+                    document.getElementById('adminBtn').classList.add('bg-amber-500/20', 'text-amber-400', 'border-amber-500');
+                    document.getElementById('adminBtnText').innerText = "已开启管理员模式";
+                    document.getElementById('uploadTriggerBtn').classList.remove('hidden');
+                    renderResources();
+                    alert("管理员模式开启成功！现在可以添加与删除资源。");
+                } else if (pwd !== null) {
+                    alert("管理员密码错误！");
+                }
+            } else {
+                isAdmin = false;
+                document.getElementById('adminBtn').classList.add('bg-gray-800', 'text-gray-300');
+                document.getElementById('adminBtn').classList.remove('bg-amber-500/20', 'text-amber-400', 'border-amber-500');
+                document.getElementById('adminBtnText').innerText = "管理员模式";
+                document.getElementById('uploadTriggerBtn').classList.add('hidden');
+                renderResources();
+                alert("已退出管理员模式。");
+            }
+        }
+
+        function openUploadModal() {
+            document.getElementById('uploadModal').classList.remove('hidden');
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.add('hidden');
+            document.getElementById('uploadForm').reset();
+        }
+
         function setCategory(cat) {
             currentCategory = cat;
-            document.querySelectorAll('.category-tab').forEach(btn => {
-                btn.className = "category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-dota-card text-gray-300 hover:bg-dota-border whitespace-nowrap";
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                if (tab.dataset.cat === cat) {
+                    tab.className = "category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-amber-500 text-black font-bold";
+                } else {
+                    tab.className = "category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-gray-800 text-gray-300 hover:bg-gray-700";
+                }
             });
-            const activeBtn = document.getElementById(`cat-${cat}`);
-            if (activeBtn) {
-                activeBtn.className = "category-tab px-4 py-2 rounded-xl text-sm font-medium transition bg-amber-500 text-black shadow-lg shadow-amber-500/20 whitespace-nowrap";
-            }
             renderResources();
         }
 
-        // Render resource grid
-        function renderResources() {
-            const grid = document.getElementById('resourceGrid');
-            const emptyState = document.getElementById('emptyState');
-            const searchVal = document.getElementById('searchInput').value.toLowerCase().trim();
+        function handleUploadSubmit(event) {
+            event.preventDefault();
+            const title = document.getElementById('resTitle').value;
+            const category = document.getElementById('resCategory').value;
+            const desc = document.getElementById('resDesc').value;
+            const link = document.getElementById('resLink').value;
+            const imageFile = document.getElementById('resImage').files[0];
 
-            grid.innerHTML = '';
-
-            const filtered = resources.filter(item => {
-                const matchCat = currentCategory === 'all' || item.category === currentCategory;
-                const matchSearch = item.title.toLowerCase().includes(searchVal) || item.description.toLowerCase().includes(searchVal);
-                return matchCat && matchSearch;
-            });
-
-            if (filtered.length === 0) {
-                emptyState.classList.remove('hidden');
-                return;
-            } else {
-                emptyState.classList.add('hidden');
-            }
-
-            filtered.forEach(item => {
-                const catLabels = {
-                    map: '🗺️ 地图地形',
-                    weather: '☀️ 天气效果',
-                    effigy: '✨ 纹章装饰',
-                    effect: '🌿 地图特效'
+            if (imageFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    addNewResource(title, category, desc, e.target.result, link);
                 };
+                reader.readAsDataURL(imageFile);
+            } else {
+                // 默认占位图
+                const defaultImg = "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80";
+                addNewResource(title, category, desc, defaultImg, link);
+            }
+        }
 
-                const card = document.createElement('div');
-                card.className = "bg-dota-card border border-dota-border rounded-2xl overflow-hidden shadow-xl hover:border-amber-500/50 transition flex flex-col group";
-                
-                card.innerHTML = `
-                    <div class="relative h-48 overflow-hidden bg-slate-900">
-                        <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/600x400/141c2e/e0a838?text=Dota+2+Asset'">
-                        <div class="absolute top-3 left-3">
-                            <span class="px-3 py-1 rounded-full bg-dota-dark/80 backdrop-blur-md text-amber-400 text-xs font-semibold border border-dota-border">
-                                ${catLabels[item.category] || item.category}
-                            </span>
-                        </div>
-                        <div class="absolute bottom-3 right-3">
-                            <span class="px-2.5 py-1 rounded-lg bg-black/70 backdrop-blur-md text-gray-300 text-xs font-mono">
-                                ${item.fileSize}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="p-5 flex-grow flex flex-col justify-between">
-                        <div>
-                            <h3 class="text-base font-bold text-white mb-2 line-clamp-1 group-hover:text-amber-400 transition">${item.title}</h3>
-                            <p class="text-xs text-gray-400 line-clamp-2 mb-4 leading-relaxed">${item.description}</p>
-                        </div>
-                        <div class="pt-4 border-t border-dota-border flex items-center justify-between">
-                            <span class="text-[11px] text-gray-500 font-mono"><i class="fa-regular fa-calendar mr-1"></i>${item.uploadDate}</span>
-                            <div class="flex items-center space-x-2">
-                                ${isAdminMode ? `
-                                    <button onclick="deleteResource('${item.id}')" title="删除文件" class="p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 transition text-sm">
-                                        <i class="fa-solid fa-trash-can"></i>
-                                    </button>
-                                ` : ''}
-                                <button onclick="downloadResource('${item.id}')" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold transition shadow-md flex items-center space-x-1.5">
-                                    <i class="fa-solid fa-download"></i>
-                                    <span>下载文件</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
+        function addNewResource(title, category, desc, image, link) {
+            const newRes = {
+                id: Date.now(),
+                title,
+                category,
+                desc,
+                image,
+                link,
+                date: new Date().toISOString().split('T')[0]
+            };
+            resources.unshift(newRes);
+            saveToStorage();
+            closeUploadModal();
+            renderResources();
+            alert("资源添加成功！");
+        }
+
+        function deleteResource(id) {
+            if (confirm("确定要删除这个资源吗？")) {
+                resources = resources.filter(item => item.id !== id);
+                saveToStorage();
+                renderResources();
+            }
         }
 
         function filterResources() {
             renderResources();
         }
 
-        // Direct Download implementation
-        function downloadResource(id) {
-            const item = resources.find(r => r.id === id);
-            if (!item) return;
+        function renderResources() {
+            const grid = document.getElementById('resourceGrid');
+            const searchKeyword = document.getElementById('searchInput').value.toLowerCase();
+            
+            const filtered = resources.filter(item => {
+                const matchesCat = currentCategory === 'all' || item.category === currentCategory;
+                const matchesSearch = item.title.toLowerCase().includes(searchKeyword) || item.desc.toLowerCase().includes(searchKeyword);
+                return matchesCat && matchesSearch;
+            });
 
-            if (item.downloadData) {
-                // Trigger download from base64 stored file
-                const a = document.createElement('a');
-                a.href = item.downloadData;
-                a.download = item.fileName || 'dota2_resource.vpk';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            } else {
-                // Simulate download for mock items
-                const blob = new Blob([`Dota 2 Resource Mock Content: ${item.title}\nFilename: ${item.fileName}`], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = item.fileName;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            }
-
-            showToast('开始下载', `正在下载文件: ${item.fileName}`, 'success');
-        }
-
-        // Admin Auth Modals
-        function openAdminLoginModal() {
-            if (isAdminMode) {
-                // Logout admin mode
-                isAdminMode = false;
-                document.getElementById('adminActionBar').classList.add('hidden');
-                document.getElementById('adminBtnText').innerText = '管理员模式';
-                document.getElementById('adminIcon').className = 'fa-solid fa-shield-halved';
-                document.getElementById('adminModeToggleBtn').classList.remove('border-amber-500', 'bg-amber-500/10');
-                showToast('已退出', '管理员模式已安全关闭。', 'success');
-                renderResources();
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-16 text-center text-gray-500">
+                        <svg class="w-16 h-16 mx-auto mb-4 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/></svg>
+                        <p class="text-base font-medium">没有找到相关资源</p>
+                    </div>
+                `;
                 return;
             }
-            document.getElementById('adminPasswordInput').value = '';
-            document.getElementById('loginErrorMsg').classList.add('hidden');
-            document.getElementById('adminLoginModal').classList.remove('hidden');
+
+            grid.innerHTML = filtered.map(item => {
+                let catLabel = '';
+                if(item.category === 'maps') catLabel = '🗺️ 地图地形';
+                else if(item.category === 'weather') catLabel = '🌤️ 天气效果';
+                else if(item.category === 'emblems') catLabel = '🛡️ 专属纹章';
+                else if(item.category === 'effects') catLabel = '✨ 地图特效';
+
+                return `
+                    <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between border border-gray-800 hover:border-amber-500/50 transition duration-300 group">
+                        <div>
+                            <div class="relative h-48 overflow-hidden bg-gray-900">
+                                <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                                <span class="absolute top-3 left-3 px-3 py-1 bg-black/60 backdrop-blur-md rounded-lg text-xs font-semibold text-amber-400 border border-white/10">${catLabel}</span>
+                            </div>
+                            <div class="p-5 space-y-2">
+                                <h3 class="text-lg font-bold text-white line-clamp-1 group-hover:text-amber-400 transition">${item.title}</h3>
+                                <p class="text-xs text-gray-400 line-clamp-2 leading-relaxed">${item.desc}</p>
+                            </div>
+                        </div>
+                        <div class="p-5 pt-0 flex items-center justify-between gap-3">
+                            <a href="${item.link}" target="_blank" class="flex-grow py-2.5 bg-gray-800 hover:bg-amber-500 hover:text-black text-white text-sm font-bold rounded-xl transition text-center flex items-center justify-center space-x-2">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                <span>立即下载</span>
+                            </a>
+                            ${isAdmin ? `
+                                <button onclick="deleteResource(${item.id})" class="px-3 py-2.5 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white rounded-xl transition border border-red-500/30" title="删除资源">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
-        function closeAdminLoginModal() {
-            document.getElementById('adminLoginModal').classList.add('hidden');
-        }
-
-        function verifyAdminPassword() {
-            const pass = document.getElementById('adminPasswordInput').value;
-            if (pass === '1q2w3e4rghzs12..GH') {
-                isAdminMode = true;
-                closeAdminLoginModal();
-                document.getElementById('adminActionBar').classList.remove('hidden');
-                document.getElementById('adminBtnText').innerText = '退出管理';
-                document.getElementById('adminIcon').className = 'fa-solid fa-shield-cat';
-                document.getElementById('adminModeToggleBtn').classList.add('border-amber-500', 'bg-amber-500/10');
-                showToast('登录成功', '管理员模式已成功开启！', 'success');
-                renderResources();
-            } else {
-                document.getElementById('loginErrorMsg').classList.remove('hidden');
-            }
-        }
-
-        // Upload Resource Modal
-        function openUploadModal() {
-            document.getElementById('uploadForm').reset();
-            document.getElementById('uploadModal').classList.remove('hidden');
-        }
-
-        function closeUploadModal() {
-            document.getElementById('uploadModal').classList.add('hidden');
-        }
-
-        function handleUploadSubmit(event) {
-            event.preventDefault();
-            const title = document.getElementById('uploadTitle').value.trim();
-            const category = document.getElementById('uploadCategory').value;
-            const description = document.getElementById('uploadDesc').value.trim();
-            const imageFile = document.getElementById('uploadImageFile').files[0];
-            const resourceFile = document.getElementById('uploadResourceFile').files[0];
-
-            if (!resourceFile) return;
-
-            const readerImage = new FileReader();
-            const readerResource = new FileReader();
-
-            let imageUrl = 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80';
-            let resourceDataUrl = '';
-
-            const finishUpload = () => {
-                const newItem = {
-                    id: 'res-' + Date.now(),
-                    title,
-                    category,
-                    description,
-                    image: imageUrl,
-                    fileName: resourceFile.name,
-                    fileSize: formatBytes(resourceFile.size),
-                    uploadDate: new Date().toISOString().split('T')[0],
-                    downloadData: resourceDataUrl
-                };
-
-                resources.unshift(newItem);
-                saveStorage();
-                closeUploadModal();
-                renderResources();
-                showToast('上传成功', `资源 "${title}" 已成功添加并支持下载。`, 'success');
-            };
-
-            readerResource.onload = function(e) {
-                resourceDataUrl = e.target.result;
-                if (imageFile) {
-                    readerImage.onload = function(imgEvent) {
-                        imageUrl = imgEvent.target.result;
-                        finishUpload();
-                    };
-                    readerImage.readAsDataURL(imageFile);
-                } else {
-                    finishUpload();
-                }
-            };
-
-            readerResource.readAsDataURL(resourceFile);
-        }
-
-        // Delete resource function
-        function deleteResource(id) {
-            resources = resources.filter(r => r.id !== id);
-            saveStorage();
-            renderResources();
-            showToast('已删除', '对应资源文件已成功从系统中移除。', 'success');
-        }
-
-        function formatBytes(bytes, decimals = 2) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const dm = decimals < 0 ? 0 : decimals;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-        }
-
-        // Toast Helper
-        function showToast(title, message, type = 'success') {
-            document.getElementById('toastTitle').innerText = title;
-            document.getElementById('toastMessage').innerText = message;
-            document.getElementById('toastModal').classList.remove('hidden');
-        }
-
-        function closeToast() {
-            document.getElementById('toastModal').classList.add('hidden');
-        }
-
-        // Initialize on load
-        window.onload = function() {
-            initStorage();
-        };
+        // 初始化渲染
+        renderResources();
     </script>
 </body>
 </html>
