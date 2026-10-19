@@ -30,16 +30,19 @@
             </div>
             
             <div class="flex items-center space-x-2 sm:space-x-3">
-                <!-- 荧光明显的教学/编辑教程按钮 -->
-                <button id="guideBtn" onclick="handleGuideClick()" class="px-3 py-1.5 sm:py-2 bg-gradient-to-r from-cyan-500 via-teal-500 to-blue-500 text-black font-black rounded-xl pulse-glow text-xs flex items-center space-x-1.5 transition transform hover:scale-105">
+                <!-- 独立的高亮教程按钮 -->
+                <button onclick="openGuideModal()" class="px-3 py-1.5 sm:py-2 bg-gradient-to-r from-cyan-500 via-teal-500 to-blue-500 text-black font-black rounded-xl pulse-glow text-xs flex items-center space-x-1.5 transition transform hover:scale-105">
                     <svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-                    <span id="guideBtnText">📖 教你安装MOD</span>
+                    <span>📖 教你安装MOD</span>
                 </button>
 
+                <!-- 上传按钮（仅管理员显示） -->
                 <button id="uploadTriggerBtn" onclick="openUploadModal()" class="hidden px-3 py-1.5 sm:py-2 bg-gradient-to-r from-amber-500 to-yellow-500 text-black font-black rounded-xl glow-btn text-xs flex items-center space-x-1 transition transform hover:scale-105">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
                     <span>上传资源</span>
                 </button>
+
+                <!-- 管理员模式开关 -->
                 <button id="adminBtn" onclick="toggleAdminMode()" class="px-3 py-1.5 sm:py-2 rounded-xl text-xs font-semibold transition bg-gray-900/90 hover:bg-gray-800 text-gray-300 border border-gray-700/80 flex items-center space-x-1.5 shadow-lg">
                     <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                     <span id="adminBtnText">管理员模式</span>
@@ -55,19 +58,19 @@
         <div id="adminNoticeBar" class="hidden w-full text-center py-2 px-4 rounded-xl glass-panel border border-amber-500/40 shadow-lg shadow-amber-500/10 transition">
             <p class="text-xs font-bold text-amber-400 tracking-wider flex items-center justify-center space-x-2">
                 <span class="animate-pulse">⚡</span>
-                <span>当前处于【管理员模式】—— 可上传、删除资源或编辑教学文章</span>
+                <span>当前处于【管理员模式】—— 可上传/删除资源，并在教程弹窗中直接编辑文章</span>
                 <span class="animate-pulse">⚡</span>
             </p>
         </div>
 
-        <!-- 搜索与高科技分类控制台 -->
+        <!-- 搜索与高科技分类控制台（自适应折行布局） -->
         <div class="glass-panel rounded-2xl p-3.5 sm:p-4 space-y-3 shadow-2xl relative overflow-hidden">
             <div class="absolute top-0 right-0 w-48 sm:w-64 h-48 sm:h-64 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
             <div class="absolute bottom-0 left-0 w-48 sm:w-64 h-48 sm:h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
             
-            <div class="flex flex-col lg:flex-row gap-2.5 sm:gap-3 items-center justify-between relative z-10">
-                <!-- 科技感搜索框 -->
-                <div class="relative w-full lg:w-72">
+            <div class="flex flex-col gap-3 relative z-10">
+                <!-- 搜索框 -->
+                <div class="relative w-full">
                     <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                         <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                     </span>
@@ -75,7 +78,7 @@
                 </div>
 
                 <!-- 分类标签页 -->
-                <div class="flex items-center space-x-1.5 sm:space-x-2 overflow-x-auto w-full lg:w-auto no-scrollbar py-1" id="categoryTabs">
+                <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 pt-1" id="categoryTabs">
                     <button onclick="setCategory('all')" class="category-tab px-3 py-1.5 rounded-xl text-xs font-bold transition bg-amber-500 text-black shadow-lg shadow-amber-500/20 shrink-0" data-cat="all">全部</button>
                     <button onclick="setCategory('maps')" class="category-tab px-3 py-1.5 rounded-xl text-xs font-medium transition bg-gray-900/80 text-gray-300 hover:bg-gray-800 border border-gray-800 shrink-0" data-cat="maps">🗺️ 地图地形</button>
                     <button onclick="setCategory('weather')" class="category-tab px-3 py-1.5 rounded-xl text-xs font-medium transition bg-gray-900/80 text-gray-300 hover:bg-gray-800 border border-gray-800 shrink-0" data-cat="weather">🌤️ 天气效果</button>
@@ -100,9 +103,9 @@
         <p class="tracking-wider">小猴子的百变MOD云端分发终端 &copy; 2026 | Cloudflare Edge Secured</p>
     </footer>
 
-    <!-- 教学文章弹窗 -->
+    <!-- 教程文章阅读弹窗 -->
     <div id="guideModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden flex items-center justify-center p-3">
-        <div class="glass-panel rounded-2xl max-w-2w w-full max-h-[85vh] p-5 sm:p-6 space-y-4 border border-cyan-500/40 shadow-2xl relative flex flex-col">
+        <div class="glass-panel rounded-2xl max-w-2xl w-full max-h-[85vh] p-5 sm:p-6 space-y-4 border border-cyan-500/40 shadow-2xl relative flex flex-col">
             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 via-amber-500 to-cyan-500"></div>
             
             <div class="flex justify-between items-center pb-2 border-b border-gray-800 shrink-0">
@@ -117,8 +120,12 @@
                 <!-- 动态填充 -->
             </div>
 
-            <div class="flex justify-end pt-2 border-t border-gray-800 shrink-0">
-                <button onclick="closeGuideModal()" class="px-5 py-1.5 bg-gray-900 hover:bg-gray-800 text-cyan-300 rounded-xl transition border border-cyan-500/30 text-xs font-bold">关闭阅读</button>
+            <div class="flex justify-between items-center pt-2 border-t border-gray-800 shrink-0">
+                <!-- 管理员专属编辑按钮 -->
+                <button id="adminEditGuideBtn" onclick="openEditGuideModal()" class="hidden px-4 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 rounded-xl transition border border-amber-500/50 text-xs font-bold flex items-center space-x-1">
+                    <span>✏️ 编辑本文档</span>
+                </button>
+                <button onclick="closeGuideModal()" class="px-5 py-1.5 bg-gray-900 hover:bg-gray-800 text-cyan-300 rounded-xl transition border border-cyan-500/30 text-xs font-bold ml-auto">关闭</button>
             </div>
         </div>
     </div>
@@ -142,7 +149,7 @@
                 </div>
                 <div class="flex justify-end space-x-2 pt-2">
                     <button type="button" onclick="closeEditGuideModal()" class="px-4 py-1.5 bg-gray-900 hover:bg-gray-800 text-gray-300 rounded-xl transition">取消</button>
-                    <button type="submit" id="saveGuideBtn" class="px-5 py-1.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-black font-black rounded-xl transition shadow-lg shadow-amber-500/20">保存并同步云端</button>
+                    <button type="submit" id="saveGuideBtn" class="px-4 py-1.5 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-black font-black rounded-xl transition shadow-lg shadow-amber-500/20">保存并同步云端</button>
                 </div>
             </form>
         </div>
