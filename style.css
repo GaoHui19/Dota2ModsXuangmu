@@ -5,9 +5,9 @@ body {
     font-family: 'Noto Sans SC', sans-serif;
     background-color: #030712;
     background-image: 
-        radial-gradient(circle at 15% 10%, rgba(14, 165, 233, 0.18) 0%, transparent 45%),
-        radial-gradient(circle at 85% 85%, rgba(245, 158, 11, 0.15) 0%, transparent 45%),
-        radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.1) 0%, transparent 55%),
+        radial-gradient(circle at 15% 10%, rgba(14, 165, 233, 0.22) 0%, transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(245, 158, 11, 0.18) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.12) 0%, transparent 55%),
         linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
     background-size: 100% 100%, 100% 100%, 100% 100%, 28px 28px, 28px 28px;
@@ -20,15 +20,27 @@ body {
     background: rgba(3, 7, 18, 0.88);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(14, 165, 233, 0.25);
-    box-shadow: 0 4px 30px rgba(14, 165, 233, 0.12);
+    box-shadow: 0 4px 30px rgba(14, 165, 233, 0.15);
+}
+
+/* 动态高亮强烈的荧光按钮动画特效 */
+.pulse-glow {
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.7), inset 0 0 10px rgba(255, 255, 255, 0.4);
+    animation: pulseGlowAnim 2s infinite;
+}
+
+@keyframes pulseGlowAnim {
+    0% { box-shadow: 0 0 15px rgba(14, 165, 233, 0.6), 0 0 0px rgba(245, 158, 11, 0); }
+    50% { box-shadow: 0 0 30px rgba(14, 165, 233, 0.9), 0 0 15px rgba(245, 158, 11, 0.6); }
+    100% { box-shadow: 0 0 15px rgba(14, 165, 233, 0.6), 0 0 0px rgba(245, 158, 11, 0); }
 }
 
 /* 高级荧光毛玻璃面板 */
 .glass-panel {
-    background: rgba(11, 17, 32, 0.8);
+    background: rgba(11, 17, 32, 0.82);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(14, 165, 233, 0.2);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(14, 165, 233, 0.06);
+    border: 1px solid rgba(14, 165, 233, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(14, 165, 233, 0.08);
 }
 
 /* 精致小巧的科技感资源卡片 */
