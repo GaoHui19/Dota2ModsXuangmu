@@ -2,8 +2,8 @@
 const BIN_ID = '6ad5d3f1ffd5d1605377d5f8';
 const MASTER_KEY = '$2a$10$H6/1k6xZrhDZrng0EcZVyOYg3ZOBe5YmYZnO2iYMiVkJA1qv8UmXi';
 
-// 对应新密码：1q2w3e4r5t 的 SHA-256 哈希值
-const ADMIN_PWD_HASH = '1f35f29900c4391696009367464a4d6585149a4e8d356611c039783f237ef5eb';
+// 对应新密码 17610918671 的 SHA-256 哈希值
+const ADMIN_PWD_HASH = 'ba83d31481b7a695ddbd112d7d8eef0a8818556b68b0c61230cd70ae58e576be';
 
 let isAdmin = false;
 let currentCategory = 'all';
@@ -63,7 +63,7 @@ async function toggleAdminMode() {
     if (!isAdmin) {
         let inputPwd = prompt("请输入管理员密码：");
         if (inputPwd) {
-            inputPwd = inputPwd.trim(); // 自动过滤前后多余空格
+            inputPwd = inputPwd.trim(); // 自动清理多余空格
             
             const hashedInput = await sha256(inputPwd);
             if (hashedInput === ADMIN_PWD_HASH) {
@@ -71,7 +71,7 @@ async function toggleAdminMode() {
                 updateAdminUI();
                 alert("✅ 管理员身份验证成功！");
             } else {
-                alert("❌ 管理员密码错误！");
+                alert("输入错误，请重试");
             }
         }
     } else {
@@ -86,15 +86,18 @@ function updateAdminUI() {
     const adminBtn = document.getElementById('adminBtn');
     const adminBtnText = document.getElementById('adminBtnText');
     const uploadBtn = document.getElementById('uploadTriggerBtn');
+    const adminNoticeBar = document.getElementById('adminNoticeBar');
 
     if (isAdmin) {
         adminBtn.className = "px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-amber-500/20 text-amber-400 border border-amber-500 flex items-center space-x-1.5 shadow-lg shadow-amber-500/10";
         adminBtnText.innerText = "退出管理员";
         uploadBtn.classList.remove('hidden');
+        if (adminNoticeBar) adminNoticeBar.classList.remove('hidden');
     } else {
         adminBtn.className = "px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-gray-900/90 hover:bg-gray-800 text-gray-300 border border-gray-700/80 flex items-center space-x-1.5 shadow-lg";
         adminBtnText.innerText = "管理员模式";
         uploadBtn.classList.add('hidden');
+        if (adminNoticeBar) adminNoticeBar.classList.add('hidden');
     }
     renderResources();
 }
