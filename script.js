@@ -1,13 +1,15 @@
 // 🔑 云端同步 API 配置
 const BIN_ID = '6ad5d3f1ffd5d1605377d5f8';
 const MASTER_KEY = '$2a$10$H6/1k6xZrhDZrng0EcZVyOYg3ZOBe5YmYZnO2iYMiVkJA1qv8UmXi';
-const ADMIN_PWD_HASH = 'f6c18f175402bd0b94a86121f1d1988ef1be4bd0453504ef5756c9a334eefed3'; // 对应密码：1q2w3e4rghzs12..GH
+
+// 对应密码：1q2w3e4rghzs12..GH 的 SHA-256 哈希值
+const ADMIN_PWD_HASH = 'f6c18f175402bd0b94a86121f1d1988ef1be4bd0453504ef5756c9a334eefed3';
 
 let isAdmin = false;
 let currentCategory = 'all';
 let resources = [];
 
-// SHA-256 哈希计算
+// SHA-256 哈希算法实现
 async function sha256(str) {
     const buffer = new TextEncoder().encode(str);
     const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
@@ -15,7 +17,7 @@ async function sha256(str) {
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// XSS 防注入转义
+// 防 XSS 过滤
 function sanitizeInput(str) {
     if (!str) return '';
     return str.replace(/[&<>"']/g, function(m) {
@@ -23,7 +25,7 @@ function sanitizeInput(str) {
     });
 }
 
-// 从云端拉取资源
+// 从云端拉取数据
 async function fetchFromCloud() {
     try {
         const res = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
@@ -56,18 +58,21 @@ async function syncToCloud() {
     }
 }
 
-// 切换管理员模式
+// 切换管理员模式（包含防输入法误转换容错逻辑）
 async function toggleAdminMode() {
     if (!isAdmin) {
-        const inputPwd = prompt("请输入管理员密码：");
+        let inputPwd = prompt("请输入管理员密码：");
         if (inputPwd) {
+            // 自动清理前后的多余空格，并将可能误输入的中文句号修正为英文点
+            inputPwd = inputPwd.trim().replace(/。/g, '.');
+            
             const hashedInput = await sha256(inputPwd);
             if (hashedInput === ADMIN_PWD_HASH) {
                 isAdmin = true;
                 updateAdminUI();
                 alert("✅ 管理员身份验证成功！");
             } else {
-                alert("❌ 管理员密码错误！");
+                alert("❌ 管理员密码错误！请确认输入的是：1q2w3e4rghzs12..GH");
             }
         }
     } else {
@@ -159,7 +164,7 @@ async function deleteResource(id) {
 
 function filterResources() { renderResources(); }
 
-// 分类文本转化
+// 分类名称映射
 function getCategoryLabel(cat) {
     switch(cat) {
         case 'maps': return '地图';
@@ -174,7 +179,7 @@ function getCategoryLabel(cat) {
     }
 }
 
-// 渲染资源列表（无内容时显示优雅提示）
+// 渲染列表逻辑
 function renderResources() {
     const grid = document.getElementById('resourceGrid');
     const searchKeyword = sanitizeInput(document.getElementById('searchInput').value.toLowerCase());
