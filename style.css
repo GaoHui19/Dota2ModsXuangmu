@@ -1,1 +1,70 @@
-style.css
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap');
+
+/* 科技感空间背景与电竞网格纹理 */
+body {
+    font-family: 'Noto Sans SC', sans-serif;
+    background-color: #030712;
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 90%, rgba(245, 158, 11, 0.06) 0%, transparent 40%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+    color: #f3f4f6;
+}
+
+/* 顶部科技感发光导航 */
+.tech-header {
+    background: rgba(3, 7, 18, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(14, 165, 233, 0.15);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* 高级毛玻璃面板 */
+.glass-panel {
+    background: rgba(11, 17, 32, 0.75);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8);
+}
+
+/* 科技感资源卡片 */
+.glass-card {
+    background: rgba(13, 20, 36, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+    border-color: rgba(245, 158, 11, 0.5);
+    box-shadow: 0 10px 30px -5px rgba(245, 158, 11, 0.25), 0 0 15px rgba(14, 165, 233, 0.15);
+    transform: translateY(-2px);
+}
+
+/* 按钮荧光发光效果 */
+.glow-btn {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+    transition: all 0.3s ease;
+}
+
+.glow-btn:hover {
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.7);
+}
+
+/* 底部科技感 */
+.tech-footer {
+    background: rgba(3, 7, 18, 0.9);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* 滚动条美化与隐藏 */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
