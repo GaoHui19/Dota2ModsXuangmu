@@ -8,6 +8,16 @@ const ADMIN_PWD = '3109557692G';
 let isAdmin = false;
 let currentCategory = 'all';
 let resources = [];
+let guideArticle = `
+    <h4 class="text-amber-400 font-bold text-sm mb-2">📌 欢迎来到小猴子的百变MOD分发终端</h4>
+    <p class="mb-2">本站所有 MOD 补丁均支持多端实时云端同步。请按照以下步骤正确安装：</p>
+    <ol class="list-decimal list-inside space-y-1.5 text-gray-300">
+        <li>通过上方分类或者搜索栏找到您心仪的 MOD 资源。</li>
+        <li>点击卡片下方的<b>“一键下载”</b>按钮获取蓝奏云或网盘分发链接。</li>
+        <li>将下载好的 MOD 文件放置到对应的游戏目录下（如 Dota 2 根目录的 <code>game/dota</code> 或对应 addons 文件夹）。</li>
+        <li>如有疑问或需要定制 MOD，请联系管理员。</li>
+    </ol>
+`;
 
 // 防 XSS 过滤
 function sanitizeInput(str) {
@@ -25,6 +35,9 @@ async function fetchFromCloud() {
         });
         const data = await res.json();
         resources = data.record.resources || [];
+        if (data.record.guide) {
+            guideArticle = data.record.guide;
+        }
         renderResources();
     } catch (err) {
         console.error("云端加载失败", err);
@@ -42,7 +55,10 @@ async function syncToCloud() {
                 'Content-Type': 'application/json',
                 'X-Master-Key': MASTER_KEY
             },
-            body: JSON.stringify({ resources: resources })
+            body: JSON.stringify({ 
+                resources: resources,
+                guide: guideArticle 
+            })
         });
         renderResources();
     } catch (err) {
@@ -78,19 +94,52 @@ function updateAdminUI() {
     const adminBtnText = document.getElementById('adminBtnText');
     const uploadBtn = document.getElementById('uploadTriggerBtn');
     const adminNoticeBar = document.getElementById('adminNoticeBar');
+    const guideBtnText = document.getElementById('guideBtnText');
 
     if (isAdmin) {
         adminBtn.className = "px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-amber-500/20 text-amber-400 border border-amber-500 flex items-center space-x-1.5 shadow-lg shadow-amber-500/10";
         adminBtnText.innerText = "退出管理员";
         uploadBtn.classList.remove('hidden');
         if (adminNoticeBar) adminNoticeBar.classList.remove('hidden');
+        guideBtnText.innerText = "✏️ 编辑教程文章";
     } else {
         adminBtn.className = "px-3.5 py-2 rounded-xl text-xs font-semibold transition bg-gray-900/90 hover:bg-gray-800 text-gray-300 border border-gray-700/80 flex items-center space-x-1.5 shadow-lg";
         adminBtnText.innerText = "管理员模式";
         uploadBtn.classList.add('hidden');
         if (adminNoticeBar) adminNoticeBar.classList.add('hidden');
+        guideBtnText.innerText = "📖 教你安装MOD";
     }
     renderResources();
+}
+
+// 教学按钮点击逻辑：普通状态下打开阅读弹窗，管理员状态下打开编辑弹窗
+function handleGuideClick() {
+    if (isAdmin) {
+        document.getElementById('guideTextarea').value = guideArticle;
+        document.getElementById('editGuideModal').classList.remove('hidden');
+    } else {
+        document.getElementById('guideContentDisplay').innerHTML = guideArticle;
+        document.getElementById('guideModal').classList.remove('hidden');
+    }
+}
+
+function closeGuideModal() { document.getElementById('guideModal').classList.add('hidden'); }
+function closeEditGuideModal() { document.getElementById('editGuideModal').classList.add('hidden'); }
+
+// 提交编辑后的教程文章
+async function handleEditGuideSubmit(event) {
+    event.preventDefault();
+    const btn = document.getElementById('saveGuideBtn');
+    btn.innerText = "同步保存中...";
+    btn.disabled = true;
+
+    guideArticle = document.getElementById('guideTextarea').value;
+    await syncToCloud();
+
+    btn.innerText = "保存并同步云端";
+    btn.disabled = false;
+    closeEditGuideModal();
+    alert("🎉 教程文章已更新并实时同步至云端！");
 }
 
 function openUploadModal() { document.getElementById('uploadModal').classList.remove('hidden'); }
@@ -172,7 +221,7 @@ function getCategoryLabel(cat) {
     }
 }
 
-// 渲染列表逻辑（精简小巧型紧凑卡片，完美防止溢出）
+// 渲染列表逻辑
 function renderResources() {
     const grid = document.getElementById('resourceGrid');
     const searchKeyword = sanitizeInput(document.getElementById('searchInput').value.toLowerCase());
@@ -219,7 +268,7 @@ function renderResources() {
                 </div>
                 <div class="p-2 sm:p-2.5 pt-0">
                     <a href="${item.link}" target="_blank" class="w-full py-1.5 bg-gray-900 hover:bg-amber-500 hover:text-black text-cyan-300 text-[11px] font-black rounded-lg transition text-center flex items-center justify-center space-x-1 border border-cyan-500/20 group-hover:border-amber-500 shadow-md">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="root" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                         <span>一键下载</span>
                     </a>
                 </div>
