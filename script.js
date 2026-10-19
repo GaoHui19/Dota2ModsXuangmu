@@ -2,7 +2,7 @@
 const BIN_ID = '6ad5d3f1ffd5d1605377d5f8';
 const MASTER_KEY = '$2a$10$H6/1k6xZrhDZrng0EcZVyOYg3ZOBe5YmYZnO2iYMiVkJA1qv8UmXi';
 
-// 直接设定管理员密码
+// 直接设定的管理员密码
 const ADMIN_PWD = '3109557692G';
 
 let isAdmin = false;
@@ -50,12 +50,12 @@ async function syncToCloud() {
     }
 }
 
-// 切换管理员模式（直接比对明文密码）
+// 切换管理员模式
 function toggleAdminMode() {
     if (!isAdmin) {
         let inputPwd = prompt("请输入管理员密码：");
         if (inputPwd !== null) {
-            inputPwd = inputPwd.trim(); // 自动清理前后空格
+            inputPwd = inputPwd.trim();
             
             if (inputPwd === ADMIN_PWD) {
                 isAdmin = true;
@@ -172,7 +172,7 @@ function getCategoryLabel(cat) {
     }
 }
 
-// 渲染列表逻辑
+// 渲染列表逻辑（精简小巧型紧凑卡片，完美防止溢出）
 function renderResources() {
     const grid = document.getElementById('resourceGrid');
     const searchKeyword = sanitizeInput(document.getElementById('searchInput').value.toLowerCase());
@@ -185,8 +185,8 @@ function renderResources() {
 
     if (filtered.length === 0) {
         grid.innerHTML = `
-            <div class="col-span-full py-20 text-center space-y-3 glass-panel rounded-2xl border border-cyan-500/10">
-                <div class="w-14 h-14 mx-auto rounded-2xl bg-gray-900 border border-cyan-500/30 flex items-center justify-center text-2xl shadow-lg shadow-cyan-500/10 animate-pulse">✨</div>
+            <div class="col-span-full py-16 text-center space-y-2.5 glass-panel rounded-2xl border border-cyan-500/10">
+                <div class="w-12 h-12 mx-auto rounded-xl bg-gray-900 border border-cyan-500/30 flex items-center justify-center text-xl shadow-lg shadow-cyan-500/10 animate-pulse">✨</div>
                 <div class="space-y-1">
                     <p class="text-xs font-black text-amber-400 tracking-widest uppercase">暂无资源，敬请期待</p>
                     <p class="text-[11px] text-gray-500">当前分类下暂未上架 MOD 补丁，猴哥正在整活中...</p>
@@ -200,26 +200,26 @@ function renderResources() {
         let catLabel = getCategoryLabel(item.category);
 
         return `
-            <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between group relative">
+            <div class="glass-card rounded-xl overflow-hidden flex flex-col justify-between group relative">
                 <div>
-                    <div class="relative h-32 overflow-hidden bg-gray-950">
+                    <div class="relative h-24 sm:h-28 overflow-hidden bg-gray-950">
                         <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent opacity-60"></div>
-                        <span class="absolute top-2 left-2 px-2.5 py-0.5 bg-black/75 backdrop-blur-md rounded-lg text-[10px] font-bold text-amber-400 border border-amber-500/30 shadow">${catLabel}</span>
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-950 via-transparent to-transparent opacity-65"></div>
+                        <span class="absolute top-1.5 left-1.5 px-2 py-0.5 bg-black/75 backdrop-blur-md rounded-md text-[9px] font-bold text-amber-400 border border-amber-500/30 shadow">${catLabel}</span>
                         ${isAdmin ? `
-                            <button onclick="deleteResource(${item.id})" class="absolute top-2 right-2 p-1.5 bg-red-600/80 hover:bg-red-600 text-white rounded-xl transition shadow-lg" title="删除资源">
-                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            <button onclick="deleteResource(${item.id})" class="absolute top-1.5 right-1.5 p-1 bg-red-600/80 hover:bg-red-600 text-white rounded-lg transition shadow-lg" title="删除资源">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                             </button>
                         ` : ''}
                     </div>
-                    <div class="p-3 space-y-1.5">
+                    <div class="p-2 sm:p-2.5 space-y-1">
                         <h3 class="text-xs font-black text-white line-clamp-1 group-hover:text-amber-400 transition" title="${item.title}">${item.title}</h3>
-                        <p class="text-[11px] text-gray-400 line-clamp-2 leading-relaxed">${item.desc}</p>
+                        <p class="text-[10px] sm:text-[11px] text-gray-400 line-clamp-2 leading-tight">${item.desc}</p>
                     </div>
                 </div>
-                <div class="p-3 pt-0">
-                    <a href="${item.link}" target="_blank" class="w-full py-2 bg-gray-900 hover:bg-amber-500 hover:text-black text-cyan-300 text-xs font-black rounded-xl transition text-center flex items-center justify-center space-x-1.5 border border-cyan-500/20 group-hover:border-amber-500 shadow-md">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                <div class="p-2 sm:p-2.5 pt-0">
+                    <a href="${item.link}" target="_blank" class="w-full py-1.5 bg-gray-900 hover:bg-amber-500 hover:text-black text-cyan-300 text-[11px] font-black rounded-lg transition text-center flex items-center justify-center space-x-1 border border-cyan-500/20 group-hover:border-amber-500 shadow-md">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                         <span>一键下载</span>
                     </a>
                 </div>
