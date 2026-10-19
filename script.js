@@ -2,8 +2,8 @@
 const BIN_ID = '6ad5d3f1ffd5d1605377d5f8';
 const MASTER_KEY = '$2a$10$H6/1k6xZrhDZrng0EcZVyOYg3ZOBe5YmYZnO2iYMiVkJA1qv8UmXi';
 
-// 对应密码：1q2w3e4rghzs12..GH 的 SHA-256 哈希值
-const ADMIN_PWD_HASH = 'f6c18f175402bd0b94a86121f1d1988ef1be4bd0453504ef5756c9a334eefed3';
+// 对应新密码：1q2w3e4r5t 的 SHA-256 哈希值
+const ADMIN_PWD_HASH = '1f35f29900c4391696009367464a4d6585149a4e8d356611c039783f237ef5eb';
 
 let isAdmin = false;
 let currentCategory = 'all';
@@ -58,13 +58,12 @@ async function syncToCloud() {
     }
 }
 
-// 切换管理员模式（包含防输入法误转换容错逻辑）
+// 切换管理员模式
 async function toggleAdminMode() {
     if (!isAdmin) {
         let inputPwd = prompt("请输入管理员密码：");
         if (inputPwd) {
-            // 自动清理前后的多余空格，并将可能误输入的中文句号修正为英文点
-            inputPwd = inputPwd.trim().replace(/。/g, '.');
+            inputPwd = inputPwd.trim(); // 自动过滤前后多余空格
             
             const hashedInput = await sha256(inputPwd);
             if (hashedInput === ADMIN_PWD_HASH) {
@@ -72,7 +71,7 @@ async function toggleAdminMode() {
                 updateAdminUI();
                 alert("✅ 管理员身份验证成功！");
             } else {
-                alert("❌ 管理员密码错误！请确认输入的是：1q2w3e4rghzs12..GH");
+                alert("❌ 管理员密码错误！");
             }
         }
     } else {
